@@ -1,0 +1,391 @@
+<!-- pages/comunidad.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comunidad & Salud — ECOGEN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    :root { --page-accent: #b38a28; --page-accent-light: #fdf8ed; --page-accent-dark: #3a2a0a; }
+
+    /* HERO */
+    .hero-comunidad {
+      min-height: 92vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: linear-gradient(145deg, #2d1f08 0%, #3a2a0a 40%, #1a3020 100%);
+    }
+
+    /* Warm radial burst */
+    .warm-burst {
+      position: absolute; width: 900px; height: 900px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(179,138,40,.18) 0%, rgba(179,138,40,.05) 40%, transparent 70%);
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      animation: burstPulse 8s ease-in-out infinite;
+    }
+    @keyframes burstPulse { 0%,100%{transform:translate(-50%,-50%) scale(1)} 50%{transform:translate(-50%,-50%) scale(1.12)} }
+
+    /* Organic blob shapes */
+    .blob {
+      position: absolute; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      filter: blur(40px); opacity: .12;
+      animation: blobMorph 12s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 500px; height: 400px; background: var(--gold-400); top: -100px; right: -100px; }
+    .blob-2 { width: 350px; height: 350px; background: var(--green-500); bottom: -50px; left: -80px; animation-delay: 4s; }
+    @keyframes blobMorph {
+      0%  { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+      50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+      100%{ border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+    }
+
+    /* Dots pattern */
+    .dots-pattern {
+      position: absolute; inset: 0;
+      background-image: radial-gradient(rgba(179,138,40,.15) 1px, transparent 1px);
+      background-size: 28px 28px;
+    }
+
+    .hero-com-inner {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+      position: relative; z-index: 2; width: 100%;
+    }
+
+    .hero-com-text { color: white; }
+    .hero-com-eyebrow {
+      font-family: var(--font-mono); font-size: .75rem; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--gold-400); margin-bottom: 1.5rem;
+    }
+    .hero-com-title { font-size: clamp(2.2rem, 4vw, 3.8rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.25rem; }
+    .hero-com-title em { font-style: italic; color: var(--gold-400); }
+    .hero-com-desc { color: rgba(255,255,255,.65); font-size: 1.05rem; max-width: 44ch; margin-bottom: 2rem; }
+
+    /* People/community SVG infographic */
+    .community-visual {
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+
+    /* Nutrition wheel */
+    .nutrition-card {
+      background: rgba(179,138,40,.1); border: 1px solid rgba(179,138,40,.25);
+      border-radius: var(--radius-lg); padding: 1.5rem; backdrop-filter: blur(8px);
+    }
+    .nutrition-card-title { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; color: var(--gold-400); text-transform: uppercase; margin-bottom: 1rem; }
+    .nutrition-bars { display: flex; flex-direction: column; gap: .6rem; }
+    .nutrition-bar-row { display: flex; align-items: center; gap: .75rem; }
+    .nutrition-bar-label { font-size: .8rem; color: rgba(255,255,255,.6); width: 80px; flex-shrink: 0; }
+    .nutrition-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,.08); border-radius: 3px; overflow: hidden; }
+    .nutrition-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--gold-600), var(--gold-400)); animation: nutrFill 2s ease-out forwards; }
+    @keyframes nutrFill { from { width: 0; } }
+    .nutrition-bar-val { font-family: var(--font-mono); font-size: .7rem; color: var(--gold-400); width: 32px; }
+
+    /* Impact counter cards */
+    .impact-pills { display: flex; gap: .75rem; flex-wrap: wrap; }
+    .impact-pill {
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius); padding: .75rem 1rem; color: white; text-align: center;
+      flex: 1; min-width: 100px;
+    }
+    .impact-pill-num { font-family: var(--font-display); font-size: 1.4rem; color: var(--gold-400); }
+    .impact-pill-lbl { font-size: .72rem; color: rgba(255,255,255,.45); }
+
+    /* Scholarship cards */
+    .scholarship-card {
+      background: var(--white); border-radius: var(--radius-lg); overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: transform .25s var(--ease-out-expo), box-shadow .25s;
+      border-top: 4px solid var(--page-accent);
+    }
+    .scholarship-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+    .scholarship-card-head { padding: 1.5rem; background: linear-gradient(135deg, var(--gold-50), white); }
+    .scholarship-card-body { padding: 1.5rem; }
+    .scholarship-card-body h4 { margin-bottom: .5rem; }
+    .scholarship-card-body p  { font-size: .9rem; color: var(--ink-80); max-width: none; }
+    .scholarship-meta { display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap; }
+    .scholarship-meta-item { font-size: .75rem; color: var(--ink-40); display: flex; align-items: center; gap: .3rem; }
+
+    @media(max-width:768px) { .hero-com-inner { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- HERO -->
+<section class="hero-comunidad">
+  <div class="dots-pattern"></div>
+  <div class="warm-burst"></div>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div style="position:relative;z-index:2;width:100%">
+    <div class="hero-com-inner">
+
+      <div class="hero-com-text" data-reveal>
+        <p class="hero-com-eyebrow">Fundación ECOGEN · Comunidad</p>
+        <h1 class="hero-com-title">
+          Salud y nutrición<br>
+          para quienes más<br>
+          <em>lo necesitan</em>
+        </h1>
+        <p class="hero-com-desc">Programas integrales de nutrición, becas académicas y educación ambiental para comunidades vulnerables de Bolivia.</p>
+        <div class="flex gap-2" style="flex-wrap:wrap">
+          <a href="#nutricion" class="btn btn-gold">Ver programas</a>
+          <a href="#becas"     class="btn btn-ghost">Becas disponibles →</a>
+        </div>
+      </div>
+
+      <div class="community-visual" data-reveal data-reveal-delay="2">
+        <div class="nutrition-card">
+          <div class="nutrition-card-title">Indicadores nutricionales · Comunidades atendidas</div>
+          <div class="nutrition-bars">
+            <div class="nutrition-bar-row">
+              <span class="nutrition-bar-label">Proteínas</span>
+              <div class="nutrition-bar-track"><div class="nutrition-bar-fill" style="width:78%"></div></div>
+              <span class="nutrition-bar-val">78%</span>
+            </div>
+            <div class="nutrition-bar-row">
+              <span class="nutrition-bar-label">Vitaminas</span>
+              <div class="nutrition-bar-track"><div class="nutrition-bar-fill" style="width:65%;animation-delay:.2s"></div></div>
+              <span class="nutrition-bar-val">65%</span>
+            </div>
+            <div class="nutrition-bar-row">
+              <span class="nutrition-bar-label">Minerales</span>
+              <div class="nutrition-bar-track"><div class="nutrition-bar-fill" style="width:71%;animation-delay:.4s"></div></div>
+              <span class="nutrition-bar-val">71%</span>
+            </div>
+            <div class="nutrition-bar-row">
+              <span class="nutrition-bar-label">Fibra</span>
+              <div class="nutrition-bar-track"><div class="nutrition-bar-fill" style="width:82%;animation-delay:.6s"></div></div>
+              <span class="nutrition-bar-val">82%</span>
+            </div>
+          </div>
+          <div style="font-size:.7rem;color:rgba(255,255,255,.3);margin-top:.75rem">Mejora vs. línea base al inicio del programa</div>
+        </div>
+
+        <div class="impact-pills">
+          <div class="impact-pill">
+            <div class="impact-pill-num" data-count="3400">0</div>
+            <div class="impact-pill-lbl">Beneficiarios directos</div>
+          </div>
+          <div class="impact-pill">
+            <div class="impact-pill-num" data-count="18">0</div>
+            <div class="impact-pill-lbl">Comunidades</div>
+          </div>
+          <div class="impact-pill">
+            <div class="impact-pill-num" data-count="12">0</div>
+            <div class="impact-pill-lbl">Becas activas</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;right:0">
+    <svg viewBox="0 0 1440 70" preserveAspectRatio="none" style="display:block;width:100%;height:70px">
+      <path d="M0,35 Q360,70 720,35 Q1080,0 1440,35 L1440,70 L0,70Z" fill="var(--off-white)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STICKY SUBNAV -->
+<nav class="sticky-subnav">
+  <div class="container sticky-subnav-inner">
+    <a href="#nutricion" class="subnav-link active">🥗 Nutrición</a>
+    <a href="#educacion" class="subnav-link">📚 Educación</a>
+    <a href="#becas"     class="subnav-link">🎓 Becas</a>
+    <a href="#centros"   class="subnav-link">🏥 Centros móviles</a>
+  </div>
+</nav>
+
+<!-- NUTRICIÓN -->
+<section id="nutricion" class="page-section">
+  <div class="container">
+    <div class="editorial-grid">
+      <div data-reveal>
+        <p class="section-label">— Nutrición integral</p>
+        <h2>Alimentar bien es<br>la primera medicina</h2>
+        <p style="color:var(--ink-80);margin-bottom:1rem">La desnutrición crónica afecta a 1 de cada 4 niños menores de 5 años en Bolivia. ECOGEN responde con programas de nutrición basados en suplementos naturales y educación alimentaria.</p>
+        <p style="color:var(--ink-80);margin-bottom:2rem">Nuestros suplementos nutracéuticos son desarrollados en nuestros propios laboratorios, con ingredientes de origen boliviano y validación científica.</p>
+        <div class="feature-grid" style="margin-top:2rem;grid-template-columns:1fr 1fr">
+          <div class="feature-block" data-reveal data-reveal-delay="1">
+            <div class="feature-block-icon">👶</div>
+            <h3>Primera infancia</h3>
+            <p>Suplementos de micronutrientes para niños 0-5 años en comunidades rurales.</p>
+          </div>
+          <div class="feature-block" data-reveal data-reveal-delay="2">
+            <div class="feature-block-icon">👴</div>
+            <h3>Adultos mayores</h3>
+            <p>Programas de nutrición y actividad física para población de 60+ años.</p>
+          </div>
+          <div class="feature-block" data-reveal data-reveal-delay="3">
+            <div class="feature-block-icon">🤰</div>
+            <h3>Madres gestantes</h3>
+            <p>Suplementación prenatal y seguimiento nutricional durante el embarazo.</p>
+          </div>
+          <div class="feature-block" data-reveal data-reveal-delay="4">
+            <div class="feature-block-icon">🏃</div>
+            <h3>Deporte comunitario</h3>
+            <p>Fomento del deporte como herramienta de salud pública y prevención.</p>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-delay="2" style="display:flex;flex-direction:column;gap:1.25rem">
+        <div style="background:linear-gradient(135deg,var(--gold-600),#8c5e10);border-radius:var(--radius-lg);padding:2rem;color:white;position:relative;overflow:hidden">
+          <div style="position:absolute;right:-10px;bottom:-15px;font-size:6rem;opacity:.07;line-height:1">🌿</div>
+          <h3 style="color:white;margin-bottom:.75rem">Centros móviles de salud</h3>
+          <p style="color:rgba(255,255,255,.75);max-width:none;font-size:.95rem">Unidades móviles que llevan consultas nutricionales, suplementos y talleres de salud a comunidades sin acceso a servicios médicos permanentes.</p>
+          <div style="margin-top:1.25rem;font-family:var(--font-mono);font-size:.75rem;color:rgba(255,255,255,.5)">Art. 9.2g Estatuto ECOGEN</div>
+        </div>
+        <div class="stats-strip" style="border-radius:var(--radius-lg)">
+          <div class="stat-block"><div class="stat-block-num" data-count="3400">0</div><div class="stat-block-label">Beneficiarios</div></div>
+          <div class="stat-block"><div class="stat-block-num" data-count="18">0</div><div class="stat-block-label">Comunidades</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCACIÓN -->
+<section id="educacion" class="page-section page-section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Educación ambiental</p>
+      <h2>Formando la próxima<br>generación de guardianes</h2>
+      <p class="section-subtitle" style="margin:0 auto">Programas educativos en escuelas, colegios y comunidades para construir una cultura de respeto y cuidado por la naturaleza.</p>
+    </div>
+
+    <div class="grid-3">
+      <div class="feature-block" data-reveal data-reveal-delay="1" style="text-align:center">
+        <div class="feature-block-icon" style="margin:0 auto 1.25rem">📚</div>
+        <h3>Escuelas verdes</h3>
+        <p>Currícula ambiental integrada en 24 escuelas rurales de Santa Cruz, con huertos escolares y talleres de biodiversidad.</p>
+        <div style="margin-top:1rem;font-family:var(--font-display);font-size:2rem;color:var(--page-accent)">24</div>
+        <div style="font-size:.75rem;color:var(--ink-40)">Escuelas participantes</div>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="2" style="text-align:center">
+        <div class="feature-block-icon" style="margin:0 auto 1.25rem">🎓</div>
+        <h3>Formación técnica</h3>
+        <p>Cursos en biotecnología, nutrición sostenible y gestión ambiental para jóvenes de comunidades vulnerables.</p>
+        <div style="margin-top:1rem;font-family:var(--font-display);font-size:2rem;color:var(--page-accent)">6</div>
+        <div style="font-size:.75rem;color:var(--ink-40)">Cursos especializados</div>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="3" style="text-align:center">
+        <div class="feature-block-icon" style="margin:0 auto 1.25rem">🌐</div>
+        <h3>Red de conocimiento</h3>
+        <p>Participación en redes internacionales de investigación y divulgación científica con universidades de América Latina.</p>
+        <div style="margin-top:1rem;font-family:var(--font-display);font-size:2rem;color:var(--page-accent)">8</div>
+        <div style="font-size:.75rem;color:var(--ink-40)">Instituciones aliadas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BECAS -->
+<section id="becas" class="page-section">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem" data-reveal>
+      <div>
+        <p class="section-label">— Programa de becas</p>
+        <h2>Invirtiendo en<br>el talento boliviano</h2>
+      </div>
+      <a href="unete.html#donaciones" class="btn btn-primary" style="background:var(--page-accent);flex-shrink:0">Financiar una beca</a>
+    </div>
+
+    <div class="grid-3" id="becas-grid">
+      <!-- Loaded from Supabase or placeholder -->
+      <div class="scholarship-card" data-reveal data-reveal-delay="1">
+        <div class="scholarship-card-head">
+          <span class="badge badge-gold">Biotecnología</span>
+          <h3 style="margin-top:.75rem;font-size:1.15rem">Beca Investigación Vegetal</h3>
+        </div>
+        <div class="scholarship-card-body">
+          <p>Para estudiantes de Biología, Agronomía o Bioquímica interesados en genética vegetal y conservación de biodiversidad.</p>
+          <div class="scholarship-meta">
+            <span class="scholarship-meta-item">🎓 Licenciatura / Maestría</span>
+            <span class="scholarship-meta-item">📅 Cierre: 30 Jul 2025</span>
+            <span class="scholarship-meta-item">💰 Bs 1,500/mes</span>
+          </div>
+          <a href="unete.html#becas" class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:1.25rem">Postular →</a>
+        </div>
+      </div>
+      <div class="scholarship-card" data-reveal data-reveal-delay="2">
+        <div class="scholarship-card-head">
+          <span class="badge badge-green">Medio ambiente</span>
+          <h3 style="margin-top:.75rem;font-size:1.15rem">Beca Gestión Ambiental</h3>
+        </div>
+        <div class="scholarship-card-body">
+          <p>Para estudiantes o profesionales que trabajen en comunidades rurales en proyectos de conservación y restauración ecológica.</p>
+          <div class="scholarship-meta">
+            <span class="scholarship-meta-item">🎓 Técnico / Licenciatura</span>
+            <span class="scholarship-meta-item">📅 Cierre: 15 Ago 2025</span>
+            <span class="scholarship-meta-item">💰 Bs 1,200/mes</span>
+          </div>
+          <a href="unete.html#becas" class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:1.25rem">Postular →</a>
+        </div>
+      </div>
+      <div class="scholarship-card" data-reveal data-reveal-delay="3">
+        <div class="scholarship-card-head">
+          <span class="badge" style="background:var(--gold-200);color:var(--gold-600)">Nutrición</span>
+          <h3 style="margin-top:.75rem;font-size:1.15rem">Beca Nutrición Comunitaria</h3>
+        </div>
+        <div class="scholarship-card-body">
+          <p>Para nutricionistas o estudiantes de salud que desarrollen programas comunitarios en municipios con alta vulnerabilidad nutricional.</p>
+          <div class="scholarship-meta">
+            <span class="scholarship-meta-item">🎓 Licenciatura</span>
+            <span class="scholarship-meta-item">📅 Cierre: 1 Sep 2025</span>
+            <span class="scholarship-meta-item">💰 Bs 1,800/mes</span>
+          </div>
+          <a href="unete.html#becas" class="btn btn-secondary" style="width:100%;justify-content:center;margin-top:1.25rem">Postular →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CENTROS MÓVILES -->
+<section id="centros" class="page-section" style="background:var(--page-accent-dark);color:white">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center">
+      <div data-reveal>
+        <p class="section-label" style="color:var(--gold-400)">— Alcance territorial</p>
+        <h2 style="color:white">Centros móviles de<br>atención integral</h2>
+        <p style="color:rgba(255,255,255,.7);margin-bottom:1rem">Unidades equipadas con nutricionistas, kits de suplementos y materiales educativos que recorren las comunidades más aisladas del departamento de Santa Cruz.</p>
+        <p style="color:rgba(255,255,255,.7);margin-bottom:2rem">Cada visita incluye evaluación nutricional, distribución de suplementos, taller de salud y actividad física comunitaria.</p>
+        <a href="unete.html" class="btn btn-gold">Apoyar este programa →</a>
+      </div>
+      <div data-reveal data-reveal-delay="2" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+        <div style="background:rgba(179,138,40,.1);border:1px solid rgba(179,138,40,.2);border-radius:var(--radius);padding:1.5rem;text-align:center">
+          <div style="font-size:2rem;margin-bottom:.5rem">🚐</div>
+          <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--gold-400)" data-count="3">0</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.45)">Unidades móviles</div>
+        </div>
+        <div style="background:rgba(179,138,40,.1);border:1px solid rgba(179,138,40,.2);border-radius:var(--radius);padding:1.5rem;text-align:center">
+          <div style="font-size:2rem;margin-bottom:.5rem">📍</div>
+          <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--gold-400)" data-count="18">0</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.45)">Comunidades atendidas</div>
+        </div>
+        <div style="background:rgba(179,138,40,.1);border:1px solid rgba(179,138,40,.2);border-radius:var(--radius);padding:1.5rem;text-align:center">
+          <div style="font-size:2rem;margin-bottom:.5rem">👩‍⚕️</div>
+          <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--gold-400)" data-count="6">0</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.45)">Profesionales de salud</div>
+        </div>
+        <div style="background:rgba(179,138,40,.1);border:1px solid rgba(179,138,40,.2);border-radius:var(--radius);padding:1.5rem;text-align:center">
+          <div style="font-size:2rem;margin-bottom:.5rem">📅</div>
+          <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--gold-400)">2×</div>
+          <div style="font-size:.78rem;color:rgba(255,255,255,.45)">Visitas por mes</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../i18n/translations.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/components.js"></script>
+
+<script src="../js/navbar.js" data-active="comunidad" data-accent="#0d7377"></script>
+
+</body>
+</html>

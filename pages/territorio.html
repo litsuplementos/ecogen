@@ -1,0 +1,405 @@
+<!-- pages/territorio.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Territorio & Conservación — ECOGEN</title>
+  <meta name="description" content="Reforestación, restauración ecológica y gestión de bonos de carbono en Bolivia. Fundación ECOGEN.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    :root { --page-accent: #2d7a47; --page-accent-light: #d4f0df; --page-accent-dark: #0d2b1a; }
+
+    /* HERO */
+    .hero-territorio {
+      min-height: 92vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--page-accent-dark);
+    }
+
+    /* Topographic lines */
+    .topo-layer {
+      position: absolute; inset: 0; opacity: .12;
+      background:
+        radial-gradient(ellipse 120% 60% at 70% 60%, transparent 45%, rgba(45,122,71,.4) 46%, transparent 47%),
+        radial-gradient(ellipse 100% 50% at 70% 60%, transparent 52%, rgba(45,122,71,.35) 53%, transparent 54%),
+        radial-gradient(ellipse 80%  40% at 70% 60%, transparent 59%, rgba(45,122,71,.3) 60%, transparent 61%),
+        radial-gradient(ellipse 60%  30% at 70% 60%, transparent 66%, rgba(45,122,71,.25) 67%, transparent 68%),
+        radial-gradient(ellipse 40%  20% at 70% 60%, transparent 73%, rgba(45,122,71,.2) 74%, transparent 75%);
+      animation: topoShift 15s ease-in-out infinite alternate;
+    }
+    @keyframes topoShift {
+      from { transform: scale(1) translate(0, 0); }
+      to   { transform: scale(1.05) translate(-2%, 2%); }
+    }
+
+    /* Particle trees floating up */
+    .tree-particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .tree-particle {
+      position: absolute; bottom: -20px; font-size: 1.2rem; opacity: 0;
+      animation: treeRise linear infinite;
+    }
+    @keyframes treeRise {
+      0%   { transform: translateY(0) scale(.5); opacity: 0; }
+      10%  { opacity: .4; }
+      90%  { opacity: .15; }
+      100% { transform: translateY(-110vh) scale(1); opacity: 0; }
+    }
+
+    /* Green radial glow */
+    .green-glow {
+      position: absolute; width: 700px; height: 700px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(45,122,71,.25) 0%, transparent 70%);
+      top: 50%; right: -200px; transform: translateY(-50%);
+      animation: glowPulse 6s ease-in-out infinite;
+    }
+    @keyframes glowPulse { 0%,100%{opacity:.7;transform:translateY(-50%) scale(1)} 50%{opacity:1;transform:translateY(-50%) scale(1.08)} }
+
+    .hero-territorio-inner {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2rem;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center;
+      position: relative; z-index: 2; width: 100%;
+    }
+    .hero-t-text { color: white; }
+    .hero-t-eyebrow {
+      font-family: var(--font-mono); font-size: .75rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--green-400); margin-bottom: 1.5rem;
+    }
+    .hero-t-title { font-size: clamp(2.4rem, 4.5vw, 4rem); font-weight: 400; margin-bottom: 1.25rem; line-height: 1.05; }
+    .hero-t-title em { font-style: italic; color: var(--green-200); display: block; }
+    .hero-t-desc { color: rgba(255,255,255,.65); font-size: 1.05rem; max-width: 44ch; margin-bottom: 2rem; }
+
+    /* Carbon counter widget */
+    .carbon-widget {
+      background: rgba(45,122,71,.12); border: 1px solid rgba(45,122,71,.3);
+      border-radius: var(--radius-lg); padding: 1.75rem; backdrop-filter: blur(8px);
+    }
+    .carbon-widget-title {
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .12em;
+      text-transform: uppercase; color: var(--green-400); margin-bottom: 1.25rem;
+    }
+    .carbon-num { font-family: var(--font-display); font-size: 3rem; color: white; line-height: 1; }
+    .carbon-unit { font-size: 1rem; color: var(--green-400); margin-left: .25rem; }
+    .carbon-label { font-size: .8rem; color: rgba(255,255,255,.4); margin-top: .35rem; }
+    .carbon-bar { height: 6px; background: rgba(255,255,255,.1); border-radius: 3px; margin-top: 1.25rem; overflow: hidden; }
+    .carbon-bar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--green-600), var(--green-400)); animation: barFill 2s ease-out forwards; }
+    @keyframes barFill { from { width: 0; } to { width: 68%; } }
+
+    /* Tree counter */
+    .tree-count-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
+    .tree-count-item { text-align: center; }
+    .tree-count-num  { font-family: var(--font-display); font-size: 1.5rem; color: var(--green-300); }
+    .tree-count-lbl  { font-size: .72rem; color: rgba(255,255,255,.4); }
+
+    /* Map visualization */
+    .hero-t-map {
+      position: relative;
+    }
+
+    /* Bolivia outline SVG with pulsing hotspots */
+    .map-hotspot { animation: hotspotPulse 2.5s ease-in-out infinite; }
+    .map-hotspot-2 { animation-delay: .8s; }
+    .map-hotspot-3 { animation-delay: 1.6s; }
+    @keyframes hotspotPulse {
+      0%,100% { r: 8px; opacity: .7; }
+      50%     { r: 14px; opacity: .3; }
+    }
+
+    /* Wave bottom */
+    .hero-wave {
+      position: absolute; bottom: 0; left: 0; right: 0;
+    }
+
+    /* Carbon section */
+    .carbon-card {
+      background: linear-gradient(135deg, #063d1e, #0f5c30);
+      border-radius: var(--radius-lg); padding: 2.5rem; color: white;
+      position: relative; overflow: hidden;
+    }
+    .carbon-card::after {
+      content: 'CO₂'; position: absolute; right: 1.5rem; bottom: -1rem;
+      font-family: var(--font-display); font-size: 6rem; opacity: .05; font-weight: 600;
+      line-height: 1;
+    }
+
+    /* Progress bars */
+    .progress-row { margin-bottom: 1.25rem; }
+    .progress-label { display: flex; justify-content: space-between; font-size: .85rem; margin-bottom: .4rem; }
+    .progress-track { height: 8px; background: rgba(255,255,255,.08); border-radius: 4px; overflow: hidden; }
+    .progress-fill  { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--green-600), var(--green-400)); transition: width 1.5s cubic-bezier(0.16,1,0.3,1); width: 0; }
+
+    @media(max-width:768px) {
+      .hero-territorio-inner { grid-template-columns: 1fr; gap: 2rem; }
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- HERO -->
+<section class="hero-territorio">
+  <div class="topo-layer"></div>
+  <div class="green-glow"></div>
+
+  <!-- Floating tree particles -->
+  <div class="tree-particles" id="tree-particles"></div>
+
+  <div style="position:relative;z-index:2;width:100%">
+    <div class="hero-territorio-inner">
+
+      <div class="hero-t-text" data-reveal>
+        <p class="hero-t-eyebrow">Fundación ECOGEN · Territorio</p>
+        <h1 class="hero-t-title">
+          Cada árbol,<br>
+          <em>una decisión<br>por el futuro</em>
+        </h1>
+        <p class="hero-t-desc">Reforestación, restauración ecológica y gestión de bonos de carbono para proteger los ecosistemas estratégicos de Bolivia.</p>
+        <div class="flex gap-2">
+          <a href="#reforest" class="btn btn-primary">Ver proyectos</a>
+          <a href="#carbono" class="btn btn-ghost">Bonos de carbono →</a>
+        </div>
+      </div>
+
+      <div class="hero-t-map" data-reveal data-reveal-delay="2">
+        <!-- Carbon widget -->
+        <div class="carbon-widget" style="margin-bottom:1.25rem">
+          <div class="carbon-widget-title">Captura de CO₂ · Proyección 2025</div>
+          <div>
+            <span class="carbon-num" data-count="12400">0</span>
+            <span class="carbon-unit">ton</span>
+          </div>
+          <div class="carbon-label">CO₂ equivalente capturado / año estimado</div>
+          <div class="carbon-bar"><div class="carbon-bar-fill"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:.72rem;color:rgba(255,255,255,.3);margin-top:.35rem">
+            <span>0</span><span>Meta: 18,200 ton</span>
+          </div>
+        </div>
+
+        <!-- Bolivia map SVG with project hotspots -->
+        <div style="background:rgba(45,122,71,.08);border:1px solid rgba(45,122,71,.2);border-radius:var(--radius-lg);padding:1.5rem">
+          <div style="font-family:var(--font-mono);font-size:.7rem;color:var(--green-400);margin-bottom:1rem;letter-spacing:.1em">PROYECTOS ACTIVOS · BOLIVIA</div>
+          <svg viewBox="0 0 300 340" style="width:100%;max-height:220px">
+            <!-- Simplified Bolivia outline -->
+            <path d="M60,20 L240,20 L270,60 L280,120 L260,180 L220,230 L200,280 L180,320 L140,330 L100,310 L60,260 L30,200 L20,140 L30,80 Z"
+                  fill="rgba(45,122,71,.12)" stroke="rgba(45,122,71,.4)" stroke-width="1.5"/>
+            <!-- Department rough dividers -->
+            <path d="M60,20 L80,100 L140,110 L160,60 L120,20" fill="rgba(45,122,71,.06)" stroke="rgba(45,122,71,.2)" stroke-width=".8"/>
+            <path d="M140,110 L200,100 L240,60 L240,20 L160,60" fill="rgba(45,122,71,.04)" stroke="rgba(45,122,71,.2)" stroke-width=".8"/>
+            <!-- Santa Cruz hotspot -->
+            <circle cx="200" cy="170" r="8" fill="rgba(45,122,71,.3)" class="map-hotspot"/>
+            <circle cx="200" cy="170" r="4" fill="#5dba7e"/>
+            <text x="212" y="174" fill="rgba(255,255,255,.7)" font-size="9" font-family="DM Mono,monospace">Chiquitanía</text>
+            <!-- Cuenca Piraí hotspot -->
+            <circle cx="170" cy="145" r="8" fill="rgba(45,122,71,.3)" class="map-hotspot map-hotspot-2"/>
+            <circle cx="170" cy="145" r="4" fill="#3d9e60"/>
+            <text x="182" y="149" fill="rgba(255,255,255,.7)" font-size="9" font-family="DM Mono,monospace">Piraí</text>
+            <!-- Pantanal hotspot -->
+            <circle cx="225" cy="210" r="8" fill="rgba(45,122,71,.3)" class="map-hotspot map-hotspot-3"/>
+            <circle cx="225" cy="210" r="4" fill="#14a8a0"/>
+            <text x="237" y="214" fill="rgba(255,255,255,.7)" font-size="9" font-family="DM Mono,monospace">Pantanal</text>
+          </svg>
+          <div style="display:flex;gap:1rem;margin-top:.75rem;font-family:var(--font-mono);font-size:.7rem;color:rgba(255,255,255,.45)">
+            <span style="display:flex;align-items:center;gap:.35rem"><span style="width:8px;height:8px;background:#5dba7e;border-radius:50%"></span>Reforestación</span>
+            <span style="display:flex;align-items:center;gap:.35rem"><span style="width:8px;height:8px;background:#14a8a0;border-radius:50%"></span>Carbono</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 80" fill="none" preserveAspectRatio="none" style="display:block;width:100%;height:80px">
+      <path d="M0,50 C200,100 400,20 600,50 C800,80 1000,10 1200,50 C1300,70 1380,55 1440,50 L1440,80 L0,80 Z" fill="var(--off-white)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STICKY SUBNAV -->
+<nav class="sticky-subnav">
+  <div class="container sticky-subnav-inner">
+    <a href="#reforest"    class="subnav-link active">🌳 Reforestación</a>
+    <a href="#carbono"     class="subnav-link">♻️ Bonos de Carbono</a>
+    <a href="#ecosistemas" class="subnav-link">🏔️ Ecosistemas</a>
+    <a href="#alianzas"    class="subnav-link">🤝 Alianzas</a>
+  </div>
+</nav>
+
+<!-- REFORESTACIÓN -->
+<section id="reforest" class="page-section">
+  <div class="container">
+    <div class="editorial-grid">
+      <div data-reveal>
+        <p class="section-label">— Restauración ecológica</p>
+        <h2 class="section-title">Sembrando bosques,<br>restaurando cuencas</h2>
+        <p style="color:var(--ink-80);margin-bottom:1rem">Bolivia perdió más de 400,000 hectáreas de bosque en 2024. ECOGEN responde con proyectos de reforestación con especies nativas y técnicas de bioingeniería aplicada.</p>
+        <p style="color:var(--ink-80);margin-bottom:2rem">Nuestro enfoque combina siembra directa, viveros comunitarios y monitoreo satelital para garantizar la supervivencia de cada árbol plantado.</p>
+        <a href="unete.html#donaciones" class="btn btn-primary">Plantar un árbol</a>
+      </div>
+
+      <div data-reveal data-reveal-delay="2">
+        <!-- Progress bars for projects -->
+        <div style="background:var(--white);border-radius:var(--radius-lg);padding:2rem;box-shadow:var(--shadow-md)">
+          <h4 style="margin-bottom:1.5rem;color:var(--page-accent)">Avance de proyectos</h4>
+          <div class="progress-row">
+            <div class="progress-label"><span>Cuenca del Piraí</span><span style="color:var(--page-accent)">68%</span></div>
+            <div class="progress-track"><div class="progress-fill" style="--target:68%" data-progress="68"></div></div>
+            <div style="font-size:.75rem;color:var(--ink-40);margin-top:.25rem">340 / 500 hectáreas</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-label"><span>Chiquitanía Central</span><span style="color:var(--page-accent)">42%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-progress="42"></div></div>
+            <div style="font-size:.75rem;color:var(--ink-40);margin-top:.25rem">210 / 500 hectáreas</div>
+          </div>
+          <div class="progress-row">
+            <div class="progress-label"><span>Pantanal Norte</span><span style="color:var(--page-accent)">15%</span></div>
+            <div class="progress-track"><div class="progress-fill" data-progress="15"></div></div>
+            <div style="font-size:.75rem;color:var(--ink-40);margin-top:.25rem">60 / 400 hectáreas · Iniciando</div>
+          </div>
+          <div style="border-top:1px solid var(--ink-10);padding-top:1.25rem;margin-top:1.25rem;display:flex;justify-content:space-between">
+            <div><div style="font-family:var(--font-display);font-size:1.6rem;color:var(--page-accent)" data-count="610">0</div><div style="font-size:.75rem;color:var(--ink-40)">Hectáreas reforestadas</div></div>
+            <div><div style="font-family:var(--font-display);font-size:1.6rem;color:var(--page-accent)" data-count="127400">0</div><div style="font-size:.75rem;color:var(--ink-40)">Árboles plantados</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BONOS DE CARBONO -->
+<section id="carbono" class="page-section page-section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Mercado voluntario de carbono</p>
+      <h2>Bonos de carbono:<br>economía verde en acción</h2>
+      <p class="section-subtitle" style="margin:0 auto">ECOGEN diseña, gestiona y certifica proyectos de reducción y captura de emisiones bajo estándares internacionales VCS y Gold Standard.</p>
+    </div>
+
+    <div class="grid-3" style="margin-bottom:3rem">
+      <div class="carbon-card" data-reveal data-reveal-delay="1">
+        <h3 style="font-size:1.1rem;color:var(--green-200);margin-bottom:.5rem">Fase 1 · Diseño</h3>
+        <h4 style="color:white;margin-bottom:.75rem">Línea base y metodología</h4>
+        <p style="color:rgba(255,255,255,.65);font-size:.9rem;max-width:none">Medición satelital de biomasa, cálculo de stock de carbono y selección de metodología VCS/REDD+.</p>
+        <div style="margin-top:1.25rem;font-family:var(--font-mono);font-size:.72rem;color:var(--green-400)">✓ COMPLETADO</div>
+      </div>
+      <div class="carbon-card" data-reveal data-reveal-delay="2">
+        <h3 style="font-size:1.1rem;color:var(--green-200);margin-bottom:.5rem">Fase 2 · Registro</h3>
+        <h4 style="color:white;margin-bottom:.75rem">Validación y verificación</h4>
+        <p style="color:rgba(255,255,255,.65);font-size:.9rem;max-width:none">Auditoría por tercero acreditado, registro en Verra/Gold Standard y emisión de VCUs.</p>
+        <div style="margin-top:1.25rem;font-family:var(--font-mono);font-size:.72rem;color:#d4a843">⟳ EN PROGRESO</div>
+      </div>
+      <div class="carbon-card" data-reveal data-reveal-delay="3">
+        <h3 style="font-size:1.1rem;color:var(--green-200);margin-bottom:.5rem">Fase 3 · Mercado</h3>
+        <h4 style="color:white;margin-bottom:.75rem">Comercialización de bonos</h4>
+        <p style="color:rgba(255,255,255,.65);font-size:.9rem;max-width:none">Venta de créditos de carbono a empresas y organizaciones comprometidas con la neutralidad climática.</p>
+        <div style="margin-top:1.25rem;font-family:var(--font-mono);font-size:.72rem;color:rgba(255,255,255,.3)">○ PRÓXIMAMENTE</div>
+      </div>
+    </div>
+
+    <div style="background:var(--white);border-radius:var(--radius-lg);padding:2.5rem;box-shadow:var(--shadow-sm)" data-reveal>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;align-items:center">
+        <div>
+          <p style="font-size:.85rem;color:var(--ink-40);margin-bottom:.25rem">Estándar utilizado</p>
+          <p style="font-weight:600">VCS (Verra) + CCB</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--ink-40);margin-bottom:.25rem">Proyección de bonos</p>
+          <p style="font-weight:600;color:var(--page-accent)">12,400 VCU / año</p>
+        </div>
+        <div>
+          <p style="font-size:.85rem;color:var(--ink-40);margin-bottom:.25rem">Precio estimado por bono</p>
+          <p style="font-weight:600">USD 8 – 18 / tCO₂</p>
+        </div>
+        <div>
+          <a href="unete.html#donaciones" class="btn btn-primary" style="width:100%;justify-content:center">Comprar bonos →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSISTEMAS -->
+<section id="ecosistemas" class="page-section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Territorios estratégicos</p>
+      <h2>Ecosistemas que<br>protegemos</h2>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-block" data-reveal data-reveal-delay="1">
+        <div class="feature-block-icon">🌿</div>
+        <h3>Chiquitanía</h3>
+        <p>Bosque tropical único en el mundo, hogar de más de 3,000 especies de plantas, 600 aves y 120 mamíferos. ECOGEN trabaja en su restauración post-incendios.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="2">
+        <div class="feature-block-icon">💧</div>
+        <h3>Cuencas hidrográficas</h3>
+        <p>Restauración de las cuencas del Piraí, Guapay y Urubamba mediante reforestación riparia y control de erosión con bioingeniería.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="3">
+        <div class="feature-block-icon">🦜</div>
+        <h3>Pantanal boliviano</h3>
+        <p>El humedal más grande del mundo: 200,000 km² compartidos con Brasil y Paraguay. ECOGEN monitorea y protege su porción boliviana.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ALIANZAS -->
+<section id="alianzas" class="page-section" style="background:var(--page-accent-dark);color:white">
+  <div class="container" style="text-align:center">
+    <p class="section-label" style="color:var(--green-400)" data-reveal>— Cooperación</p>
+    <h2 style="color:white" data-reveal>Trabajamos con</h2>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-top:2.5rem" data-reveal>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:1rem 2rem;color:rgba(255,255,255,.7);font-size:.9rem">Municipio de San José de Chiquitos</div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:1rem 2rem;color:rgba(255,255,255,.7);font-size:.9rem">Municipio de Concepción</div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:1rem 2rem;color:rgba(255,255,255,.7);font-size:.9rem">UAGRM</div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:1rem 2rem;color:rgba(255,255,255,.7);font-size:.9rem">Fundación PUMA</div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:1rem 2rem;color:rgba(255,255,255,.7);font-size:.9rem">Verra (VCS)</div>
+      <div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:1rem 2rem;color:rgba(255,255,255,.7);font-size:.9rem">CIAT Colombia</div>
+    </div>
+    <div style="margin-top:3rem" data-reveal>
+      <a href="unete.html" class="btn btn-gold">Convertirse en aliado →</a>
+    </div>
+  </div>
+</section>
+
+<script src="../i18n/translations.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/components.js"></script>
+<script>
+  // Generate floating tree particles
+  const container = document.getElementById('tree-particles');
+  if (container) {
+    const emojis = ['🌱','🌿','🌲','🌳','🍃'];
+    for (let i = 0; i < 20; i++) {
+      const el = document.createElement('div');
+      el.className = 'tree-particle';
+      el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      el.style.left = Math.random() * 100 + '%';
+      el.style.animationDuration = (12 + Math.random() * 20) + 's';
+      el.style.animationDelay = (Math.random() * 15) + 's';
+      el.style.fontSize = (.6 + Math.random() * .8) + 'rem';
+      container.appendChild(el);
+    }
+  }
+
+  // Progress bars animation
+  document.addEventListener('DOMContentLoaded', () => {
+    initSubnav();
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const pct = e.target.dataset.progress;
+          e.target.style.width = pct + '%';
+          obs.unobserve(e.target);
+        }
+      });
+    }, { threshold: .3 });
+    document.querySelectorAll('.progress-fill').forEach(el => obs.observe(el));
+  });
+</script>
+
+<script src="../js/navbar.js" data-active="territorio" data-accent="#0d7377"></script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!-- pages/fundacion.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fundación ECOGEN — Quiénes somos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    :root { --page-accent: #185fa5; --page-accent-light: #e6f1fb; --page-accent-dark: #042c53; }
+
+    /* HERO */
+    .hero-fundacion {
+      min-height: 92vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--page-accent-dark);
+    }
+
+    /* Geometric grid animation */
+    .geo-grid {
+      position: absolute; inset: 0; opacity: .08;
+    }
+    .geo-grid svg { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+    /* Lines that sweep */
+    .sweep-line {
+      position: absolute; background: linear-gradient(90deg, transparent, rgba(24,95,165,.4), transparent);
+      height: 1px; left: 0; right: 0;
+      animation: lineSweep 5s ease-in-out infinite;
+    }
+    .sweep-line:nth-child(2) { animation-delay: 2.5s; }
+    @keyframes lineSweep {
+      0%   { top: 0; opacity: 0; }
+      5%   { opacity: 1; }
+      95%  { opacity: 1; }
+      100% { top: 100%; opacity: 0; }
+    }
+
+    /* Blue orbs */
+    .blue-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px); pointer-events: none;
+    }
+    .blue-orb-1 { width: 600px; height: 600px; background: #185fa5; opacity: .1; top: -200px; right: -200px; animation: orbDrift 14s ease-in-out infinite; }
+    .blue-orb-2 { width: 400px; height: 400px; background: #378add; opacity: .06; bottom: -100px; left: -100px; animation: orbDrift 18s ease-in-out infinite reverse; }
+    @keyframes orbDrift { 0%,100%{transform:translate(0,0)} 50%{transform:translate(20px,-30px)} }
+
+    .hero-fund-inner {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+      position: relative; z-index: 2; width: 100%;
+    }
+    .hero-fund-text { color: white; }
+    .hero-fund-eyebrow {
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .2em;
+      text-transform: uppercase; color: #85b7eb; margin-bottom: 1.5rem;
+    }
+    .hero-fund-title { font-size: clamp(2.2rem, 4vw, 3.6rem); font-weight: 400; line-height: 1.1; margin-bottom: 1.25rem; }
+    .hero-fund-title em { color: #85b7eb; font-style: normal; display: block; font-size: .65em; letter-spacing: .08em; font-family: var(--font-mono); margin-bottom: .5rem; }
+    .hero-fund-desc { color: rgba(255,255,255,.6); font-size: 1rem; max-width: 44ch; margin-bottom: 2rem; }
+
+    /* Legal card in hero */
+    .legal-card {
+      background: rgba(24,95,165,.12); border: 1px solid rgba(24,95,165,.35);
+      border-radius: var(--radius-lg); padding: 1.75rem; backdrop-filter: blur(8px);
+    }
+    .legal-card-tag {
+      font-family: var(--font-mono); font-size: .65rem; letter-spacing: .15em;
+      text-transform: uppercase; color: #85b7eb; margin-bottom: 1rem;
+    }
+    .legal-item { display: flex; align-items: flex-start; gap: .75rem; margin-bottom: .85rem; padding-bottom: .85rem; border-bottom: 1px solid rgba(255,255,255,.06); }
+    .legal-item:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+    .legal-item-art { font-family: var(--font-mono); font-size: .7rem; color: #85b7eb; min-width: 56px; padding-top: .15rem; }
+    .legal-item-text { font-size: .85rem; color: rgba(255,255,255,.65); }
+
+    /* Org chart interactive */
+    .org-interactive {
+      display: flex; flex-direction: column; align-items: center; gap: 0;
+    }
+    .org-node-int {
+      background: var(--white); border-radius: var(--radius); padding: 1rem 1.5rem;
+      text-align: center; cursor: pointer; position: relative;
+      transition: transform .2s, box-shadow .2s;
+      border-top: 3px solid var(--page-accent);
+    }
+    .org-node-int:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+    .org-node-int.primary { background: var(--page-accent); color: white; border-color: transparent; }
+    .org-node-int.primary h4 { color: white; }
+    .org-node-int.primary p  { color: rgba(255,255,255,.7); }
+    .org-node-int h4 { font-size: .9rem; font-family: var(--font-body); font-weight: 600; }
+    .org-node-int p  { font-size: .72rem; color: var(--ink-40); margin-top: .2rem; }
+    .org-connector { width: 2px; height: 28px; background: var(--page-accent); opacity: .4; }
+    .org-row { display: flex; gap: 1.5rem; justify-content: center; }
+    .org-row-connector { display: flex; align-items: flex-start; justify-content: center; position: relative; }
+    .org-row-connector::before {
+      content: ''; position: absolute; top: 0; left: 50%; right: 50%;
+      height: 2px; background: var(--page-accent); opacity: .4;
+    }
+    .org-branch { display: flex; flex-direction: column; align-items: center; }
+    .org-branch-connector { width: 2px; height: 20px; background: var(--page-accent); opacity: .3; }
+
+    /* Principle accordion */
+    .principles-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .principle-chip {
+      padding: .85rem 1rem; border-radius: var(--radius); border: 1px solid var(--ink-10);
+      font-size: .88rem; display: flex; align-items: center; gap: .6rem;
+      transition: border-color .2s, background .2s;
+    }
+    .principle-chip:hover { border-color: var(--page-accent); background: var(--page-accent-light); }
+    .principle-chip-letter {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: var(--page-accent-light); color: var(--page-accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; font-weight: 700; flex-shrink: 0;
+    }
+
+    @media(max-width:768px) {
+      .hero-fund-inner { grid-template-columns: 1fr; }
+      .principles-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- HERO -->
+<section class="hero-fundacion">
+  <div class="blue-orb blue-orb-1"></div>
+  <div class="blue-orb blue-orb-2"></div>
+  <div class="sweep-line"></div>
+  <div class="sweep-line" style="animation-delay:2.5s"></div>
+
+  <!-- Geometric SVG background -->
+  <div class="geo-grid">
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice">
+      <rect x="0"   y="0"   width="360" height="225" fill="none" stroke="rgba(24,95,165,.15)" stroke-width="1"/>
+      <rect x="360" y="0"   width="360" height="225" fill="none" stroke="rgba(24,95,165,.1)"  stroke-width="1"/>
+      <rect x="720" y="0"   width="360" height="225" fill="none" stroke="rgba(24,95,165,.12)" stroke-width="1"/>
+      <rect x="1080" y="0"  width="360" height="225" fill="none" stroke="rgba(24,95,165,.08)" stroke-width="1"/>
+      <rect x="0"   y="225" width="360" height="225" fill="none" stroke="rgba(24,95,165,.08)" stroke-width="1"/>
+      <rect x="360" y="225" width="360" height="225" fill="rgba(24,95,165,.03)" stroke="rgba(24,95,165,.12)" stroke-width="1"/>
+      <line x1="0" y1="0" x2="1440" y2="900" stroke="rgba(24,95,165,.06)" stroke-width="1"/>
+      <line x1="1440" y1="0" x2="0" y2="900" stroke="rgba(24,95,165,.06)" stroke-width="1"/>
+    </svg>
+  </div>
+
+  <div style="position:relative;z-index:2;width:100%">
+    <div class="hero-fund-inner">
+      <div class="hero-fund-text" data-reveal>
+        <p class="hero-fund-eyebrow">Fundación ECOGEN · Institución</p>
+        <h1 class="hero-fund-title">
+          <em>Ley Departamental N° 50</em>
+          Transparencia,<br>ciencia y<br>propósito social
+        </h1>
+        <p class="hero-fund-desc">Una fundación privada sin fines de lucro, constituida en Santa Cruz, Bolivia, comprometida con la gobernanza democrática y la rendición de cuentas.</p>
+        <div class="flex gap-2">
+          <a href="#gobernanza" class="btn btn-primary" style="background:var(--page-accent)">Ver estructura</a>
+          <a href="../assets/estatuto-ecogen.pdf" class="btn btn-ghost" target="_blank">📄 Descargar Estatuto</a>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-delay="2">
+        <div class="legal-card">
+          <div class="legal-card-tag">Marco legal · Estatuto Orgánico 2025</div>
+          <div class="legal-item">
+            <span class="legal-item-art">Art. 1</span>
+            <span class="legal-item-text">Ley Departamental N° 50 de Personalidades Jurídicas, modificada por Ley N° 309.</span>
+          </div>
+          <div class="legal-item">
+            <span class="legal-item-art">Art. 2</span>
+            <span class="legal-item-text">Entidad civil sin fines de lucro constituida con acuerdo unánime de los asociados fundadores.</span>
+          </div>
+          <div class="legal-item">
+            <span class="legal-item-art">Art. 5</span>
+            <span class="legal-item-text">Duración indefinida mientras subsistan los fines para los cuales fue creada.</span>
+          </div>
+          <div class="legal-item">
+            <span class="legal-item-art">Art. 49</span>
+            <span class="legal-item-text">El patrimonio se destina exclusivamente a los fines fundacionales; nunca se distribuye entre asociados.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;right:0">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="display:block;width:100%;height:60px">
+      <path d="M0,30 L480,60 L960,20 L1440,50 L1440,60 L0,60Z" fill="var(--off-white)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STICKY SUBNAV -->
+<nav class="sticky-subnav">
+  <div class="container sticky-subnav-inner">
+    <a href="#quienes"    class="subnav-link active">🏛️ Quiénes somos</a>
+    <a href="#gobernanza" class="subnav-link">⚖️ Gobernanza</a>
+    <a href="#principios" class="subnav-link">✦ Principios</a>
+    <a href="#documentos" class="subnav-link">📄 Documentos</a>
+    <a href="#legal"      class="subnav-link">📋 Marco legal</a>
+  </div>
+</nav>
+
+<!-- QUIÉNES SOMOS -->
+<section id="quienes" class="page-section">
+  <div class="container">
+    <div class="editorial-grid">
+      <div data-reveal>
+        <p class="section-label">— Nuestra identidad</p>
+        <h2 class="section-title">Una fundación nacida<br>de la urgencia ambiental</h2>
+        <p style="color:var(--ink-80);margin-bottom:1rem">La Fundación ECOGEN surge en respuesta a los desafíos globales y locales que interpelan la salud humana, el deterioro ambiental, la pérdida de biodiversidad y la necesidad de generar soluciones innovadoras para el bienestar de las poblaciones vulnerables.</p>
+        <p style="color:var(--ink-80);margin-bottom:1rem">Con sede en el Departamento de Santa Cruz, Estado Plurinacional de Bolivia, operamos bajo la Ley Departamental N° 50 de Personalidades Jurídicas y nos regimos por nuestro Estatuto Orgánico aprobado en Asamblea General Extraordinaria.</p>
+        <p style="color:var(--ink-80)">Somos ajena a toda preferencia religiosa o política. Nuestra única agenda es la ciencia, la naturaleza y el bienestar común.</p>
+      </div>
+
+      <div data-reveal data-reveal-delay="2">
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div style="background:var(--page-accent-light);border-radius:var(--radius-lg);padding:2rem;border-left:4px solid var(--page-accent)">
+            <h4 style="color:var(--page-accent);margin-bottom:.5rem">Misión</h4>
+            <p style="max-width:none;font-size:.95rem;color:var(--ink-80)">Integrar biotecnología, genética y conservación ambiental con prácticas sostenibles y conocimiento ancestral para mejorar la salud humana y proteger los ecosistemas bolivianos.</p>
+          </div>
+          <div style="background:var(--green-50);border-radius:var(--radius-lg);padding:2rem;border-left:4px solid var(--green-500)">
+            <h4 style="color:var(--green-700);margin-bottom:.5rem">Visión</h4>
+            <p style="max-width:none;font-size:.95rem;color:var(--ink-80)">Ser el centro de referencia en biotecnología verde y conservación genética del oriente boliviano, reconocido por su rigor científico, transparencia y compromiso social.</p>
+          </div>
+          <div style="background:var(--gold-50);border-radius:var(--radius-lg);padding:2rem;border-left:4px solid var(--gold-500)">
+            <h4 style="color:var(--gold-600);margin-bottom:.5rem">Valores</h4>
+            <p style="max-width:none;font-size:.95rem;color:var(--ink-80)">Respeto por la vida, ciencia con propósito social, interculturalidad, equidad, transparencia, innovación sostenible y "Vivir Bien".</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOBERNANZA -->
+<section id="gobernanza" class="page-section page-section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" data-reveal>
+      <p class="section-label">— Estructura orgánica</p>
+      <h2>Gobernanza democrática<br>y participativa</h2>
+      <p class="section-subtitle" style="margin:0 auto">La Fundación opera con una estructura de tres niveles: Asamblea General, Directorio y Dirección Ejecutiva, conforme a los Artículos 19–46 del Estatuto.</p>
+    </div>
+
+    <div class="org-interactive" data-reveal>
+      <!-- Nivel 1 -->
+      <div class="org-node-int primary" style="width:300px">
+        <h4>Asamblea General</h4>
+        <p>Primera autoridad · Art. 20</p>
+      </div>
+      <div class="org-connector"></div>
+
+      <!-- Nivel 2 -->
+      <div class="org-node-int" style="width:280px;border-color:var(--page-accent)">
+        <h4>Directorio</h4>
+        <p>Presidente · Secretario/a · Tesorero/a · Art. 31</p>
+      </div>
+      <div class="org-connector"></div>
+
+      <!-- Nivel 3 -->
+      <div style="display:flex;align-items:flex-start;justify-content:center;gap:0;width:100%;max-width:700px;position:relative">
+        <!-- horizontal line -->
+        <div style="position:absolute;top:0;left:calc(50% - 175px);width:350px;height:2px;background:var(--page-accent);opacity:.3"></div>
+        <div class="org-branch" style="flex:1">
+          <div class="org-branch-connector"></div>
+          <div class="org-node-int" style="width:100%;max-width:190px">
+            <h4>Dirección Ejecutiva</h4>
+            <p>Art. 43-44</p>
+          </div>
+        </div>
+        <div class="org-branch" style="flex:1">
+          <div class="org-branch-connector"></div>
+          <div class="org-node-int" style="width:100%;max-width:190px">
+            <h4>Coordinadores</h4>
+            <p>Por proyecto · Art. 46.3</p>
+          </div>
+        </div>
+        <div class="org-branch" style="flex:1">
+          <div class="org-branch-connector"></div>
+          <div class="org-node-int" style="width:100%;max-width:190px">
+            <h4>Comisiones Especiales</h4>
+            <p>Art. 46.1a</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preguntas frecuentes sobre gobernanza -->
+    <div style="max-width:800px;margin:4rem auto 0" data-reveal>
+      <h3 style="margin-bottom:1.5rem;font-size:1.4rem">Preguntas sobre gobernanza</h3>
+      <div class="accordion-item">
+        <button class="accordion-trigger">¿Cómo se elige el Directorio? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">El Directorio es elegido por la Asamblea General Ordinaria mediante votación, con un período de gestión de 2 años renovable por un período adicional (Art. 41). Para ser miembro se requiere no tener antecedentes penales, no tener deudas con la Fundación y estar debidamente registrado.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">¿Con qué frecuencia se reúnen? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">El Directorio se reúne mínimamente una vez al mes (Art. 36). La Asamblea Ordinaria se celebra al menos una vez al año, antes del último día de marzo. Las Asambleas Extraordinarias pueden convocarse en cualquier momento por el Directorio o la mayoría de asociados.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">¿Quiénes pueden ser asociados? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">Puede ser miembro cualquier ciudadano comprometido con la misión de ECOGEN, sin distinción de raza, credo, filiación política o nacionalidad (Art. 10). La admisión requiere solicitud escrita patrocinada por un miembro activo y aprobación por mayoría del Directorio.</div></div>
+      </div>
+      <div class="accordion-item">
+        <button class="accordion-trigger">¿Cómo se audita la fundación? <span class="accordion-icon">+</span></button>
+        <div class="accordion-body"><div class="accordion-body-inner">El Directorio contrata anualmente una auditoría externa independiente y presenta los resultados en la Asamblea Ordinaria (Art. 32.1h). Cualquier asociado puede solicitar fiscalización mediante moción aprobada en Asamblea General (Art. 55).</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPIOS -->
+<section id="principios" class="page-section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Artículo 7 del Estatuto</p>
+      <h2>Principios que nos guían</h2>
+    </div>
+    <div class="principles-grid" data-reveal>
+      <div class="principle-chip"><span class="principle-chip-letter">a</span>Respeto por la vida y la biodiversidad</div>
+      <div class="principle-chip"><span class="principle-chip-letter">b</span>Ciencia con propósito social</div>
+      <div class="principle-chip"><span class="principle-chip-letter">c</span>Salud y Nutrición integral</div>
+      <div class="principle-chip"><span class="principle-chip-letter">d</span>Interculturalidad</div>
+      <div class="principle-chip"><span class="principle-chip-letter">e</span>Igualdad y dignidad humana</div>
+      <div class="principle-chip"><span class="principle-chip-letter">f</span>Equidad y justicia social</div>
+      <div class="principle-chip"><span class="principle-chip-letter">g</span>Protección contra toda discriminación</div>
+      <div class="principle-chip"><span class="principle-chip-letter">h</span>Vivir bien</div>
+      <div class="principle-chip"><span class="principle-chip-letter">o</span>Innovación sostenible</div>
+      <div class="principle-chip"><span class="principle-chip-letter">p</span>Protección de territorios ecológicos</div>
+      <div class="principle-chip"><span class="principle-chip-letter">q</span>Acción climática activa</div>
+      <div class="principle-chip"><span class="principle-chip-letter">r</span>Transparencia y cooperación</div>
+    </div>
+  </div>
+</section>
+
+<!-- DOCUMENTOS -->
+<section id="documentos" class="page-section page-section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Documentos públicos</p>
+      <h2>Transparencia total</h2>
+    </div>
+    <div class="grid-3" id="docs-grid" data-reveal>
+      <div class="feature-block" style="text-align:center">
+        <div class="feature-block-icon" style="margin:0 auto 1.25rem">📋</div>
+        <h3>Estatuto Orgánico</h3>
+        <p>11 capítulos, 66 artículos. Marco normativo completo de la Fundación ECOGEN.</p>
+        <a href="../assets/estatuto-ecogen.pdf" class="btn btn-primary" style="margin-top:1.25rem;background:var(--page-accent);width:100%;justify-content:center" target="_blank">Descargar PDF</a>
+      </div>
+      <div class="feature-block" style="text-align:center">
+        <div class="feature-block-icon" style="margin:0 auto 1.25rem">📊</div>
+        <h3>Informe Anual 2025</h3>
+        <p>Memoria de actividades, estados financieros y evaluación de proyectos. (Disponible tras Asamblea)</p>
+        <button class="btn btn-secondary" style="margin-top:1.25rem;width:100%;justify-content:center" disabled>Próximamente</button>
+      </div>
+      <div class="feature-block" style="text-align:center">
+        <div class="feature-block-icon" style="margin:0 auto 1.25rem">⚖️</div>
+        <h3>Personería Jurídica</h3>
+        <p>Resolución de otorgamiento de personalidad jurídica conforme a Ley Departamental N° 50.</p>
+        <button class="btn btn-secondary" style="margin-top:1.25rem;width:100%;justify-content:center" disabled>En trámite</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARCO LEGAL -->
+<section id="legal" class="page-section" style="background:var(--page-accent-dark);color:white">
+  <div class="container">
+    <p class="section-label" style="color:#85b7eb" data-reveal>— Marco normativo</p>
+    <h2 style="color:white;margin-bottom:2rem" data-reveal>Base legal de la Fundación</h2>
+    <div class="grid-2" data-reveal>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+        <div style="background:rgba(24,95,165,.15);border:1px solid rgba(24,95,165,.3);border-radius:var(--radius);padding:1.25rem">
+          <div style="font-family:var(--font-mono);font-size:.7rem;color:#85b7eb;margin-bottom:.35rem">Constitución Política del Estado</div>
+          <p style="color:rgba(255,255,255,.7);font-size:.9rem;max-width:none">Art. 300, numeral 13 y Art. 21, inciso 4 — Reconocimiento a organizaciones civiles sin fines de lucro.</p>
+        </div>
+        <div style="background:rgba(24,95,165,.15);border:1px solid rgba(24,95,165,.3);border-radius:var(--radius);padding:1.25rem">
+          <div style="font-family:var(--font-mono);font-size:.7rem;color:#85b7eb;margin-bottom:.35rem">Código Civil</div>
+          <p style="color:rgba(255,255,255,.7);font-size:.9rem;max-width:none">Artículos 55, 58, 64 y 65 — Personas jurídicas, extinción y liquidación de entidades civiles.</p>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.75rem">
+        <div style="background:rgba(24,95,165,.15);border:1px solid rgba(24,95,165,.3);border-radius:var(--radius);padding:1.25rem">
+          <div style="font-family:var(--font-mono);font-size:.7rem;color:#85b7eb;margin-bottom:.35rem">Ley Departamental N° 50</div>
+          <p style="color:rgba(255,255,255,.7);font-size:.9rem;max-width:none">Personalidades Jurídicas de Santa Cruz, 19 octubre 2012, modificada por Ley N° 309 — Requisitos para fundaciones.</p>
+        </div>
+        <div style="background:rgba(24,95,165,.15);border:1px solid rgba(24,95,165,.3);border-radius:var(--radius);padding:1.25rem">
+          <div style="font-family:var(--font-mono);font-size:.7rem;color:#85b7eb;margin-bottom:.35rem">Ley N° 045 / DS N° 0762</div>
+          <p style="color:rgba(255,255,255,.7);font-size:.9rem;max-width:none">Contra el Racismo y Toda Forma de Discriminación. La Fundación adhiere plenamente a sus principios.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="../i18n/translations.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/components.js"></script>
+
+<script src="../js/navbar.js" data-active="fubndaci" data-accent="#0d7377"></script>
+
+</body>
+</html>

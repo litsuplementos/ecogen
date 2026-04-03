@@ -1,0 +1,479 @@
+<!-- pages/ciencia.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ciencia & Biotecnología — ECOGEN</title>
+  <meta name="description" content="Investigación genética, laboratorios de biotecnología y desarrollo de nutracéuticos naturales. Fundación ECOGEN Bolivia.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    :root { --page-accent: #0d7377; --page-accent-light: #c0eceb; --page-accent-dark: #0b4d4d; }
+
+    /* HERO */
+    .hero-ciencia {
+      min-height: 92vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: #071a1a;
+    }
+
+    /* Animated hex grid */
+    .hex-grid {
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(60deg, rgba(13,115,119,.06) 0, rgba(13,115,119,.06) 1px, transparent 0, transparent 50%),
+        repeating-linear-gradient(120deg, rgba(13,115,119,.06) 0, rgba(13,115,119,.06) 1px, transparent 0, transparent 50%),
+        repeating-linear-gradient(0deg, rgba(13,115,119,.06) 0, rgba(13,115,119,.06) 1px, transparent 0, transparent 50%);
+      background-size: 60px 60px;
+      animation: hexShift 20s linear infinite;
+    }
+    @keyframes hexShift { to { background-position: 60px 60px; } }
+
+    /* Floating molecule nodes */
+    .molecule-canvas {
+      position: absolute; inset: 0; pointer-events: none;
+    }
+
+    /* Scan line effect */
+    .scan-line {
+      position: absolute; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(13,115,119,.6), transparent);
+      animation: scan 4s ease-in-out infinite;
+    }
+    @keyframes scan { 0% { top: -2px; opacity: 0; } 10% { opacity: 1; } 90% { opacity: 1; } 100% { top: 100%; opacity: 0; } }
+
+    /* Glowing orb */
+    .teal-orb {
+      position: absolute; border-radius: 50%; filter: blur(80px);
+      pointer-events: none;
+    }
+    .orb-1 { width: 500px; height: 500px; background: #0d7377; opacity: .12; top: -100px; right: -100px; animation: orbFloat 12s ease-in-out infinite; }
+    .orb-2 { width: 300px; height: 300px; background: #14a8a0; opacity: .08; bottom: 0; left: 10%; animation: orbFloat 16s ease-in-out infinite reverse; }
+    @keyframes orbFloat { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,30px)} }
+
+    .hero-ciencia-content {
+      position: relative; z-index: 2; width: 100%;
+    }
+    .hero-ciencia-inner {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2rem;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .hero-c-text { color: white; }
+    .hero-c-eyebrow {
+      font-family: var(--font-mono); font-size: .75rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--teal-300);
+      margin-bottom: 1.5rem; display: flex; align-items: center; gap: .75rem;
+    }
+    .hero-c-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--teal-300); opacity: .6; }
+    .hero-c-title { font-size: clamp(2.2rem, 4vw, 3.6rem); font-weight: 400; margin-bottom: 1.25rem; line-height: 1.1; }
+    .hero-c-title em { font-style: italic; color: var(--teal-300); }
+    .hero-c-desc { color: rgba(255,255,255,.65); font-size: 1.05rem; max-width: 44ch; margin-bottom: 2rem; }
+    .hero-c-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2rem; }
+    .hero-c-tag {
+      padding: .35rem .85rem; border-radius: 100px;
+      border: 1px solid rgba(13,115,119,.5); color: var(--teal-300);
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .08em;
+    }
+
+    /* DNA helix visual right side */
+    .hero-c-visual {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      height: 420px;
+    }
+    .dna-helix {
+      position: relative; width: 120px; height: 380px;
+    }
+    .dna-strand {
+      position: absolute; width: 100%;
+      animation: dnaSpin 6s ease-in-out infinite;
+    }
+    .dna-strand-2 { animation-delay: -3s; }
+    @keyframes dnaSpin {
+      0%, 100% { transform: rotateY(0deg); }
+      50%       { transform: rotateY(180deg); }
+    }
+
+    /* Floating data panels */
+    .data-panel {
+      position: absolute; background: rgba(13,115,119,.12);
+      border: 1px solid rgba(13,115,119,.3); border-radius: 10px;
+      padding: .75rem 1rem; backdrop-filter: blur(8px);
+      font-family: var(--font-mono); font-size: .72rem; color: var(--teal-300);
+      animation: panelFloat 4s ease-in-out infinite;
+    }
+    .data-panel-1 { top: 20px;  right: -60px; animation-delay: 0s; }
+    .data-panel-2 { top: 50%;   left: -80px;  animation-delay: 1.5s; transform: translateY(-50%); }
+    .data-panel-3 { bottom: 30px; right: -40px; animation-delay: 3s; }
+    @keyframes panelFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+    .data-panel-2 { animation: panelFloat2 5s ease-in-out infinite 1.5s; }
+    @keyframes panelFloat2 { 0%,100%{transform:translateY(-50%)} 50%{transform:translateY(calc(-50% - 8px))} }
+
+    /* Sub sections */
+    #biotech, #nutra, #labs { position: relative; }
+
+    /* Lab counter ring */
+    .ring-stat {
+      display: flex; flex-direction: column; align-items: center;
+      padding: 2rem;
+    }
+    .ring-svg { width: 120px; height: 120px; transform: rotate(-90deg); }
+    .ring-svg circle {
+      fill: none; stroke-width: 8;
+      stroke-linecap: round;
+    }
+    .ring-track { stroke: var(--ink-10); }
+    .ring-fill {
+      stroke: var(--page-accent);
+      stroke-dasharray: 283;
+      stroke-dashoffset: 283;
+      transition: stroke-dashoffset 1.5s cubic-bezier(0.16,1,0.3,1);
+    }
+    .ring-label { font-family: var(--font-display); font-size: 1.4rem; font-weight: 600; color: var(--page-accent); margin-top: .75rem; }
+    .ring-desc  { font-size: .8rem; color: var(--ink-40); text-align: center; margin-top: .25rem; }
+
+    /* Molecule card */
+    .molecule-card {
+      background: linear-gradient(135deg, var(--page-accent-dark), #0d7377);
+      border-radius: var(--radius-lg); padding: 2.5rem;
+      color: white; position: relative; overflow: hidden;
+    }
+    .molecule-card::before {
+      content: '⬡'; position: absolute; right: -20px; bottom: -30px;
+      font-size: 10rem; opacity: .05; line-height: 1;
+    }
+    .molecule-card h3 { font-size: 1.4rem; color: white; margin-bottom: .75rem; }
+    .molecule-card p  { color: rgba(255,255,255,.75); max-width: none; }
+    .molecule-card-tag { display: inline-block; background: rgba(255,255,255,.12); color: rgba(255,255,255,.85); padding: .25rem .75rem; border-radius: 100px; font-size: .75rem; margin: .75rem 0 0; margin-right: .35rem; }
+
+    @media(max-width:768px) {
+      .hero-ciencia-inner { grid-template-columns: 1fr; gap: 2rem; }
+      .hero-c-visual { height: 260px; }
+      .data-panel { display: none; }
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- NAV injected by JS -->
+
+<!-- HERO -->
+<section class="hero-ciencia">
+  <div class="hex-grid"></div>
+  <div class="teal-orb orb-1"></div>
+  <div class="teal-orb orb-2"></div>
+  <div class="scan-line"></div>
+
+  <div class="hero-ciencia-content">
+    <div class="hero-ciencia-inner">
+      <div class="hero-c-text" data-reveal>
+        <p class="hero-c-eyebrow">Fundación ECOGEN · Ciencia</p>
+        <h1 class="hero-c-title">
+          Genética al servicio<br>de la <em>vida</em>
+        </h1>
+        <p class="hero-c-desc">Laboratorios, bancos genéticos y nutracéuticos de origen natural para proteger la biodiversidad boliviana y mejorar la salud humana.</p>
+        <div class="hero-c-tags">
+          <span class="hero-c-tag">Biotecnología vegetal</span>
+          <span class="hero-c-tag">Genómica</span>
+          <span class="hero-c-tag">Nutracéuticos</span>
+          <span class="hero-c-tag">Bancos genéticos</span>
+        </div>
+        <div class="flex gap-2">
+          <a href="#biotech" class="btn btn-primary" style="background:var(--page-accent)">Ver investigaciones</a>
+          <a href="unete.html" class="btn btn-ghost">Colaborar</a>
+        </div>
+      </div>
+
+      <div class="hero-c-visual">
+        <!-- Animated SVG DNA helix -->
+        <svg width="160" height="400" viewBox="0 0 160 400" fill="none" style="position:relative;z-index:2">
+          <!-- Strand A -->
+          <path d="M80 10 C120 50, 40 90, 80 130 C120 170, 40 210, 80 250 C120 290, 40 330, 80 370"
+                stroke="rgba(13,115,119,.8)" stroke-width="2.5" fill="none">
+            <animate attributeName="stroke-dasharray" values="0 400;400 0" dur="3s" begin="0s" repeatCount="indefinite"/>
+          </path>
+          <!-- Strand B -->
+          <path d="M80 10 C40 50, 120 90, 80 130 C40 170, 120 210, 80 250 C40 290, 120 330, 80 370"
+                stroke="rgba(20,168,160,.6)" stroke-width="2.5" fill="none">
+            <animate attributeName="stroke-dasharray" values="0 400;400 0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+          </path>
+          <!-- Rungs -->
+          <line x1="110" y1="50"  x2="50"  y2="50"  stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="50"  y1="90"  x2="110" y2="90"  stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="110" y1="130" x2="50"  y2="130" stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="50"  y1="170" x2="110" y2="170" stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="110" y1="210" x2="50"  y2="210" stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="50"  y1="250" x2="110" y2="250" stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="110" y1="290" x2="50"  y2="290" stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <line x1="50"  y1="330" x2="110" y2="330" stroke="rgba(13,115,119,.4)" stroke-width="1.5"/>
+          <!-- Base pair nodes -->
+          <circle cx="110" cy="50"  r="5" fill="#0d7377" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="2s" begin="0s"   repeatCount="indefinite"/></circle>
+          <circle cx="50"  cy="50"  r="5" fill="#14a8a0" opacity=".8"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin="0s"   repeatCount="indefinite"/></circle>
+          <circle cx="50"  cy="90"  r="5" fill="#0d7377" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="2s" begin=".5s"  repeatCount="indefinite"/></circle>
+          <circle cx="110" cy="90"  r="5" fill="#14a8a0" opacity=".8"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin=".5s"  repeatCount="indefinite"/></circle>
+          <circle cx="110" cy="130" r="5" fill="#0d7377" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="2s" begin="1s"  repeatCount="indefinite"/></circle>
+          <circle cx="50"  cy="130" r="5" fill="#14a8a0" opacity=".8"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin="1s"  repeatCount="indefinite"/></circle>
+          <circle cx="50"  cy="170" r="5" fill="#5dba7e" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="2s" begin="1.5s" repeatCount="indefinite"/></circle>
+          <circle cx="110" cy="170" r="5" fill="#5dba7e" opacity=".8"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin="1.5s" repeatCount="indefinite"/></circle>
+          <circle cx="110" cy="210" r="5" fill="#0d7377" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="2s" begin="2s"  repeatCount="indefinite"/></circle>
+          <circle cx="50"  cy="210" r="5" fill="#14a8a0" opacity=".8"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin="2s"  repeatCount="indefinite"/></circle>
+          <circle cx="50"  cy="250" r="5" fill="#0d7377" opacity=".8"><animate attributeName="opacity" values=".4;1;.4" dur="2s" begin="2.5s" repeatCount="indefinite"/></circle>
+          <circle cx="110" cy="250" r="5" fill="#14a8a0" opacity=".8"><animate attributeName="opacity" values="1;.4;1" dur="2s" begin="2.5s" repeatCount="indefinite"/></circle>
+        </svg>
+
+        <!-- Floating data panels -->
+        <div class="data-panel data-panel-1">
+          <div style="color:rgba(255,255,255,.4);font-size:.65rem;margin-bottom:.25rem">SEQ_ID: 00447-A</div>
+          <div>Calophyllum brasiliense</div>
+          <div style="color:rgba(255,255,255,.4);font-size:.65rem;margin-top:.25rem">GC content: 42.3%</div>
+        </div>
+        <div class="data-panel data-panel-2">
+          <div style="color:rgba(255,255,255,.4);font-size:.65rem;margin-bottom:.25rem">SAMPLE</div>
+          <div>Tajibo amarillo</div>
+          <div style="color:#5dba7e;font-size:.65rem;margin-top:.25rem">✓ Catalogado</div>
+        </div>
+        <div class="data-panel data-panel-3">
+          <div style="color:rgba(255,255,255,.4);font-size:.65rem;margin-bottom:.25rem">ANALYSIS</div>
+          <div>Antioxidantes: +++</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wave bottom -->
+  <div style="position:absolute;bottom:0;left:0;right:0;overflow:hidden;line-height:0">
+    <svg viewBox="0 0 1440 60" fill="none" preserveAspectRatio="none" style="display:block;width:100%;height:60px">
+      <path d="M0,40 C360,80 1080,0 1440,40 L1440,60 L0,60 Z" fill="var(--off-white)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STICKY SUBNAV -->
+<nav class="sticky-subnav">
+  <div class="container sticky-subnav-inner">
+    <a href="#biotech"  class="subnav-link active">🧬 Biotecnología</a>
+    <a href="#nutra"    class="subnav-link">🌿 Nutracéuticos</a>
+    <a href="#labs"     class="subnav-link">🔬 Laboratorios</a>
+    <a href="#impacto"  class="subnav-link">📊 Impacto</a>
+  </div>
+</nav>
+
+<!-- BIOTECNOLOGÍA -->
+<section id="biotech" class="page-section">
+  <div class="container">
+    <div class="editorial-grid">
+      <div data-reveal>
+        <p class="section-label">— Biotecnología vegetal</p>
+        <h2 class="section-title">Preservando el patrimonio<br>genético boliviano</h2>
+        <p style="color:var(--ink-80);margin-bottom:1rem">Bolivia es uno de los 17 países megadiversos del planeta. La Chiquitanía, el Pantanal y los Yungas albergan especies vegetales con propiedades medicinales, alimenticias y biotecnológicas aún sin documentar.</p>
+        <p style="color:var(--ink-80);margin-bottom:2rem">ECOGEN desarrolla investigación genética aplicada para identificar, catalogar y preservar estas especies, generando tecnologías que promuevan la salud y la regeneración ambiental.</p>
+
+        <div class="timeline">
+          <div class="timeline-item" data-reveal data-reveal-delay="1">
+            <div class="timeline-date">Fase 1 · 2025</div>
+            <h4>Inventario genético inicial</h4>
+            <p>Catalogación de 200 especies endémicas de la Chiquitanía con técnicas de secuenciación de nueva generación.</p>
+          </div>
+          <div class="timeline-item" data-reveal data-reveal-delay="2">
+            <div class="timeline-date">Fase 2 · 2026</div>
+            <h4>Banco genético in vitro</h4>
+            <p>Conservación de material genético en condiciones controladas para garantizar la disponibilidad futura de especies en riesgo.</p>
+          </div>
+          <div class="timeline-item" data-reveal data-reveal-delay="3">
+            <div class="timeline-date">Fase 3 · 2027</div>
+            <h4>Transferencia tecnológica</h4>
+            <p>Publicación de hallazgos y formación de investigadores locales en universidades bolivianas aliadas.</p>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-delay="2">
+        <div class="molecule-card" style="margin-bottom:1.5rem">
+          <h3>Banco Genético Chiquitano</h3>
+          <p>Primera colección in vitro de especies endémicas del oriente boliviano, con protocolos de criopreservación y caracterización molecular.</p>
+          <div style="margin-top:1.25rem">
+            <span class="molecule-card-tag">200+ especies</span>
+            <span class="molecule-card-tag">San José de Chiquitos</span>
+            <span class="molecule-card-tag">VER - VCS</span>
+          </div>
+          <div style="margin-top:1.5rem;display:flex;gap:1rem">
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--teal-100)">200+</div>
+              <div style="font-size:.72rem;color:rgba(255,255,255,.5)">Especies catalogadas</div>
+            </div>
+            <div style="width:1px;background:rgba(255,255,255,.1)"></div>
+            <div style="text-align:center">
+              <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--teal-100)">87%</div>
+              <div style="font-size:.72rem;color:rgba(255,255,255,.5)">Endémicas de Bolivia</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feature-block" style="border-color:rgba(13,115,119,.2)">
+          <div class="feature-block-icon">🔭</div>
+          <h3>Alianzas académicas</h3>
+          <p>Convenios con UAGRM, UMSA y centros de investigación internacionales para co-publicación y validación científica.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NUTRACÉUTICOS -->
+<section id="nutra" class="page-section page-section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" data-reveal>
+      <p class="section-label">— Nutracéuticos naturales</p>
+      <h2>De la selva al suplemento</h2>
+      <p class="section-subtitle" style="margin:0 auto">Desarrollamos y validamos científicamente suplementos alimenticios y productos naturales derivados de la biodiversidad boliviana.</p>
+    </div>
+
+    <div class="feature-grid">
+      <div class="feature-block" data-reveal data-reveal-delay="1">
+        <div class="feature-block-icon">🌱</div>
+        <h3>Probióticos nativos</h3>
+        <p>Identificación y cultivo de microorganismos benéficos propios del ecosistema boliviano para suplementos digestivos y de inmunidad.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="2">
+        <div class="feature-block-icon">🍄</div>
+        <h3>Extractos de hongos medicinales</h3>
+        <p>Investigación de especies fúngicas de la Amazonia boliviana con propiedades adaptogénicas, antioxidantes y anticancerígenas.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="3">
+        <div class="feature-block-icon">🌰</div>
+        <h3>Superalimentos del oriente</h3>
+        <p>Majo, copoazú, asaí, cacao silvestre y otras especies nativas con alta densidad nutricional documentada.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="4">
+        <div class="feature-block-icon">⚗️</div>
+        <h3>Validación científica</h3>
+        <p>Todos los productos pasan por análisis fitoquímico, toxicológico y ensayos de biodisponibilidad antes de su distribución.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="1">
+        <div class="feature-block-icon">🤝</div>
+        <h3>Producción ética</h3>
+        <p>Cadenas de valor que benefician directamente a comunidades recolectoras con precios justos y contratos transparentes.</p>
+      </div>
+      <div class="feature-block" data-reveal data-reveal-delay="2">
+        <div class="feature-block-icon">📋</div>
+        <h3>Certificaciones</h3>
+        <p>Procesos de certificación orgánica, buenas prácticas de manufactura (BPM) y registro SENASAG para cada producto.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LABORATORIOS -->
+<section id="labs" class="page-section" style="background:var(--page-accent-dark);color:white">
+  <div class="container">
+    <div class="editorial-grid reverse">
+      <div data-reveal>
+        <!-- Animated lab schematic -->
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius-lg);padding:2rem;font-family:var(--font-mono);font-size:.8rem;color:rgba(255,255,255,.6)">
+          <div style="color:var(--teal-300);margin-bottom:1.25rem;font-size:.85rem">LAB STATUS · ECOGEN-01</div>
+          <div style="display:flex;flex-direction:column;gap:.75rem">
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span>Secuenciador NGS</span>
+              <span style="color:#5dba7e;display:flex;align-items:center;gap:.35rem"><span style="width:6px;height:6px;background:#5dba7e;border-radius:50%;display:inline-block;animation:pulse 2s infinite"></span>ACTIVO</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span>Cámara de cultivo</span>
+              <span style="color:#5dba7e;display:flex;align-items:center;gap:.35rem"><span style="width:6px;height:6px;background:#5dba7e;border-radius:50%;display:inline-block;animation:pulse 2s infinite .5s"></span>ACTIVO</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span>HPLC-MS</span>
+              <span style="color:#d4a843;display:flex;align-items:center;gap:.35rem"><span style="width:6px;height:6px;background:#d4a843;border-radius:50%;display:inline-block;animation:pulse 2s infinite 1s"></span>EN PROCESO</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <span>Criopreservación</span>
+              <span style="color:#5dba7e;display:flex;align-items:center;gap:.35rem"><span style="width:6px;height:6px;background:#5dba7e;border-radius:50%;display:inline-block;animation:pulse 2s infinite 1.5s"></span>ACTIVO</span>
+            </div>
+          </div>
+          <div style="margin-top:1.5rem;border-top:1px solid rgba(255,255,255,.08);padding-top:1rem">
+            <div style="color:var(--teal-300);margin-bottom:.5rem">MUESTRAS EN ANÁLISIS</div>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <span style="background:rgba(13,115,119,.3);padding:.2rem .6rem;border-radius:4px">SP-2247</span>
+              <span style="background:rgba(13,115,119,.3);padding:.2rem .6rem;border-radius:4px">SP-2248</span>
+              <span style="background:rgba(13,115,119,.3);padding:.2rem .6rem;border-radius:4px">SP-2249</span>
+              <span style="background:rgba(13,115,119,.2);padding:.2rem .6rem;border-radius:4px;opacity:.5">+17 más</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-delay="1">
+        <p class="section-label" style="color:var(--teal-300)">— Infraestructura científica</p>
+        <h2 style="color:white">Laboratorios de<br>biotecnología verde</h2>
+        <p style="color:rgba(255,255,255,.7);margin-bottom:1rem">Nuestros laboratorios en Santa Cruz cuentan con equipamiento de última generación para investigación genómica, análisis fitoquímico y producción controlada de suplementos.</p>
+        <p style="color:rgba(255,255,255,.7);margin-bottom:2rem">Importamos reactivos, equipos y tecnología especializada directamente, conforme al Art. 6.5 de nuestro Estatuto.</p>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem">
+          <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:1.25rem">
+            <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--teal-300)">4</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.5)">Áreas de laboratorio</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:1.25rem">
+            <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--teal-300)">12</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.5)">Equipos especializados</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:1.25rem">
+            <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--teal-300)">8</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.5)">Investigadores activos</div>
+          </div>
+          <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:var(--radius);padding:1.25rem">
+            <div style="font-family:var(--font-display);font-size:1.8rem;color:var(--teal-300)">ISO</div>
+            <div style="font-size:.8rem;color:rgba(255,255,255,.5)">Certificación en proceso</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACTO -->
+<section id="impacto" class="page-section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Resultados</p>
+      <h2>Impacto medible</h2>
+    </div>
+    <div class="stats-strip" data-reveal>
+      <div class="stat-block">
+        <div class="stat-block-num" data-count="200">0</div>
+        <div class="stat-block-unit">+</div>
+        <div class="stat-block-label">Especies catalogadas</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-block-num" data-count="8">0</div>
+        <div class="stat-block-unit"></div>
+        <div class="stat-block-label">Investigadores</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-block-num" data-count="4">0</div>
+        <div class="stat-block-unit"></div>
+        <div class="stat-block-label">Publicaciones en curso</div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-block-num" data-count="3">0</div>
+        <div class="stat-block-unit"></div>
+        <div class="stat-block-label">Universidades aliadas</div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:3rem" data-reveal>
+      <a href="unete.html#donaciones" class="btn btn-primary" style="background:var(--page-accent)">Apoya nuestra investigación</a>
+    </div>
+  </div>
+</section>
+
+<style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}</style>
+
+<script src="../i18n/translations.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/components.js"></script>
+
+<script src="../js/navbar.js" data-active="ciencia" data-accent="#0d7377"></script>
+
+</body>
+</html>

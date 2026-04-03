@@ -1,0 +1,670 @@
+<!-- index.html-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECOGEN: Ecología y Genética para el Desarrollo Sostenible</title>
+  <meta name="description" content="Fundación ECOGEN: biotecnología, conservación de ecosistemas y salud comunitaria para un Bolivia sostenible.">
+  <meta property="og:title" content="Fundación ECOGEN">
+  <meta property="og:description" content="Ciencia viva para un planeta que respira.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://ecogen.org.bo/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="css/main.css">
+  <style>
+    /* Overlay de transición de fondo */
+    #hero-transition-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      opacity: 0; pointer-events: none;
+      transition: opacity 1.2s ease-in-out;
+    }
+    #hero-transition-overlay.visible { opacity: 1; }
+
+    /* Palabra animada */
+    #hero-word {
+      display: inline-block;
+      transition: opacity .4s ease, transform .4s ease;
+    }
+    #hero-word.fade-out { opacity: 0; transform: translateY(8px); }
+    #hero-word.fade-in  { opacity: 1; transform: translateY(0); }
+
+    /* Inline extras for index only */
+    .hero-dna {
+      position: absolute; right: 6%; top: 50%; transform: translateY(-50%);
+      opacity: .06; pointer-events: none;
+    }
+    @media (max-width: 900px) { .hero-dna { display: none; } }
+  </style>
+</head>
+<body>
+
+<!-- HOME HERO -->
+<main>
+<section id="home-hero">
+  <div class="hero-bg"></div>
+  <div id="hero-transition-overlay"></div>
+  <canvas id="hero-grid-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:1"></canvas>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <!-- DNA illustration -->
+  <svg class="hero-dna" width="320" height="600" viewBox="0 0 320 600" fill="none">
+    <path d="M80 20 Q160 60 240 100 Q160 140 80 180 Q160 220 240 260 Q160 300 80 340 Q160 380 240 420 Q160 460 80 500" stroke="rgba(255,255,255,.15)" stroke-width="2" fill="none"/>
+    <path d="M240 20 Q160 60 80 100 Q160 140 240 180 Q160 220 80 260 Q160 300 240 340 Q160 380 80 420 Q160 460 240 500" stroke="rgba(255,255,255,.15)" stroke-width="2" fill="none"/>
+    <line x1="80"  y1="100" x2="240" y2="100" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+    <line x1="240" y1="180" x2="80"  y2="180" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+    <line x1="80"  y1="260" x2="240" y2="260" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+    <line x1="240" y1="340" x2="80"  y2="340" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+    <line x1="80"  y1="420" x2="240" y2="420" stroke="rgba(255,255,255,.08)" stroke-width="1.5"/>
+    <circle cx="80"  cy="100" r="5" fill="rgba(93,186,126,.4)"/>
+    <circle cx="240" cy="180" r="5" fill="rgba(93,186,126,.4)"/>
+    <circle cx="80"  cy="260" r="5" fill="rgba(20,168,160,.4)"/>
+    <circle cx="240" cy="340" r="5" fill="rgba(93,186,126,.4)"/>
+    <circle cx="80"  cy="420" r="5" fill="rgba(20,168,160,.4)"/>
+  </svg>
+
+  <div class="hero-content">
+    <h1 class="hero-title">
+      Conciencia para un planeta <em id="hero-word">que respira</em>
+    </h1>
+    <p class="hero-desc" data-i18n="hero_desc">Unimos biotecnología, conservación y salud comunitaria para crear soluciones sostenibles en Bolivia y el mundo.</p>
+    <div class="hero-cta">
+      <a href="pages/ciencia.html" class="btn btn-primary" data-i18n="hero_cta_primary">Conoce nuestros proyectos</a>
+      <a href="pages/unete.html"   class="btn btn-ghost"   data-i18n="hero_cta_secondary">Únete a la Fundación</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
+      <rect x="1" y="1" width="14" height="22" rx="7" stroke="white" stroke-width="1.5"/>
+      <circle cx="8" cy="7" r="2" fill="white">
+        <animate attributeName="cy" values="7;14;7" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0;1" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </svg>
+  </div>
+
+  <!-- Stats bar -->
+  <div class="hero-stats">
+    <div class="hero-stat">
+      <div class="hero-stat-num" data-count="12">0</div>
+      <div class="hero-stat-label" data-i18n="hero_stat_projects">Proyectos activos</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" data-count="2400">0</div>
+      <div class="hero-stat-label" data-i18n="hero_stat_hectares">Hectáreas protegidas</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" data-count="18">0</div>
+      <div class="hero-stat-label" data-i18n="hero_stat_communities">Comunidades</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num" data-count="34">0</div>
+      <div class="hero-stat-label" data-i18n="hero_stat_members">Miembros</div>
+    </div>
+  </div>
+</section>
+
+
+<!-- MISSION -->
+<section id="mission">
+  <div class="container">
+    <div class="mission-grid">
+      <div class="mission-text" data-reveal>
+        <p class="section-label" data-i18n="mission_label">— Nuestra misión</p>
+        <h2 class="section-title" data-i18n="mission_title">Donde la ciencia y la naturaleza convergen</h2>
+        <p data-i18n="mission_p1">La Fundación ECOGEN nace como respuesta a los desafíos globales que afectan la salud humana, el deterioro ambiental y la pérdida de biodiversidad en Bolivia.</p>
+        <p class="mt-2" data-i18n="mission_p2">Integramos genética, biotecnología e ingeniería ambiental con prácticas sostenibles y conocimiento ancestral para construir un futuro resiliente.</p>
+
+        <div class="mission-pillars mt-4">
+          <div class="pillar" data-reveal data-reveal-delay="1">
+            <span class="pillar-icon">🧬</span>
+            <div class="pillar-text">
+              <h4 data-i18n="pillar_bio_title">Investigación científica</h4>
+              <p data-i18n="pillar_bio_text">Laboratorios de biotecnología y bancos genéticos para preservar el patrimonio biológico boliviano.</p>
+            </div>
+          </div>
+          <div class="pillar" data-reveal data-reveal-delay="2">
+            <span class="pillar-icon">🌳</span>
+            <div class="pillar-text">
+              <h4 data-i18n="pillar_eco_title">Conservación territorial</h4>
+              <p data-i18n="pillar_eco_text">Proyectos de reforestación, restauración ecológica y gestión de bonos de carbono.</p>
+            </div>
+          </div>
+          <div class="pillar" data-reveal data-reveal-delay="3">
+            <span class="pillar-icon">🥗</span>
+            <div class="pillar-text">
+              <h4 data-i18n="pillar_sal_title">Salud y nutrición</h4>
+              <p data-i18n="pillar_sal_text">Nutracéuticos y programas comunitarios para poblaciones vulnerables.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mission-visual" data-reveal data-reveal-delay="2">
+        <div class="mission-img-wrap">
+          <div class="mission-img-placeholder">
+            <svg width="80" height="80" viewBox="0 0 80 80" fill="none" style="margin:0 auto 1rem">
+              <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="1" opacity=".3"/>
+              <path d="M20 50 Q30 20 40 30 Q50 40 60 20" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/>
+              <circle cx="40" cy="30" r="6" fill="currentColor" opacity=".2"/>
+              <path d="M28 60 Q34 45 40 50 Q46 55 52 42" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" opacity=".6"/>
+            </svg>
+            <div>[ foto: laboratorio / campo ]</div>
+          </div>
+        </div>
+        <div class="mission-badge-float">
+          <div class="mbf-icon">🇧🇴</div>
+          <div>
+            <div class="mbf-num" data-i18n="mission_badge_num">2025</div>
+            <div class="mbf-label" data-i18n="mission_badge_label">Año de fundación</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PILLARS (Ejes de acción) -->
+<section id="pillars">
+  <div class="container">
+    <div class="pillars-header" data-reveal>
+      <p class="section-label" style="color:var(--green-400)" data-i18n="pillars_label">— Nuestros ejes de acción</p>
+      <h2 data-i18n="pillars_title">Tres áreas, un propósito</h2>
+      <p data-i18n="pillars_desc">Cada eje representa una dimensión esencial del desarrollo sostenible que perseguimos.</p>
+    </div>
+
+    <div class="pillars-grid">
+      <div class="pillar-card" data-reveal data-reveal-delay="1">
+        <div class="pillar-card-icon green">🧬</div>
+        <h3 data-i18n="pillar1_title">Ciencia & Biotecnología</h3>
+        <p data-i18n="pillar1_text">Investigación genética aplicada, laboratorios especializados y desarrollo de nutracéuticos de origen natural.</p>
+        <a href="pages/ciencia.html" class="pillar-card-link" data-i18n="pillar1_link">Ver proyectos de ciencia →</a>
+      </div>
+      <div class="pillar-card" data-reveal data-reveal-delay="2">
+        <div class="pillar-card-icon teal">🌳</div>
+        <h3 data-i18n="pillar2_title">Territorio & Carbono</h3>
+        <p data-i18n="pillar2_text">Reforestación, restauración ecológica y gestión de bonos de carbono bajo estándares internacionales.</p>
+        <a href="pages/territorio.html" class="pillar-card-link" data-i18n="pillar2_link">Ver proyectos territoriales →</a>
+      </div>
+      <div class="pillar-card" data-reveal data-reveal-delay="3">
+        <div class="pillar-card-icon gold">🥗</div>
+        <h3 data-i18n="pillar3_title">Comunidad & Salud</h3>
+        <p data-i18n="pillar3_text">Programas de nutrición, becas académicas y educación ambiental para comunidades vulnerables.</p>
+        <a href="pages/comunidad.html" class="pillar-card-link" data-i18n="pillar3_link">Ver programas comunitarios →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PROJECTS PREVIEW -->
+<section id="projects-preview">
+  <div class="container">
+    <div class="projects-header" data-reveal>
+      <div>
+        <p class="section-label" data-i18n="projects_label">— Proyectos en curso</p>
+        <h2 data-i18n="projects_title">Acción en el territorio</h2>
+      </div>
+      <a href="pages/ciencia.html" class="btn btn-secondary" data-i18n="projects_view_all">Ver todos →</a>
+    </div>
+
+    <div class="grid-3" id="projects-grid">
+      <!-- Cargado dinámicamente desde Supabase -->
+      <div style="grid-column:1/-1;text-align:center;padding:3rem;color:var(--ink-40);font-family:var(--font-mono);font-size:.85rem">
+        Cargando proyectos...
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- NEWS PREVIEW -->
+<section id="news-preview">
+  <div class="container">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:2.5rem" data-reveal>
+      <div>
+        <p class="section-label" data-i18n="news_label">— Divulgación científica</p>
+        <h2 data-i18n="news_title">Últimas noticias</h2>
+      </div>
+      <a href="pages/noticias.html" class="btn btn-secondary" data-i18n="news_view_all">Ver todas →</a>
+    </div>
+
+    <div class="news-grid">
+      <div class="news-featured" id="news-featured" data-reveal>
+        <div class="news-featured-img" style="background:linear-gradient(135deg,var(--green-800),var(--teal-700));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);font-family:var(--font-mono);font-size:.8rem">
+          Cargando...
+        </div>
+        <div class="news-featured-body"></div>
+      </div>
+      <div class="news-list" id="news-list" data-reveal data-reveal-delay="2"></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- CTA BAND -->
+<section id="cta-band">
+  <div class="container">
+    <div class="cta-band-inner" data-reveal>
+      <div>
+        <h2 data-i18n="cta_title">¿Quieres ser parte del cambio?</h2>
+        <p data-i18n="cta_desc">Únete como miembro fundador, voluntario o colabora con tu empresa.</p>
+      </div>
+      <div class="flex gap-2" style="flex-wrap:wrap">
+        <a href="pages/unete.html#membresia" class="btn btn-gold"  data-i18n="cta_btn1">Hazte miembro</a>
+        <a href="pages/unete.html#donaciones" class="btn btn-ghost" data-i18n="cta_btn2">Donar ahora</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- GOVERNANCE PREVIEW -->
+<section id="governance-preview">
+  <div class="container">
+    <div data-reveal>
+      <p class="section-label">— Estructura orgánica</p>
+      <h2 class="section-title">Transparencia y gobernanza</h2>
+      <p class="section-subtitle">La Fundación ECOGEN opera bajo la Ley Departamental N° 50 con una estructura democrática y participativa.</p>
+    </div>
+
+    <div style="margin-top:3rem" data-reveal data-reveal-delay="2">
+      <!-- Org chart -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:1.5rem">
+        <div class="org-node primary" style="width:280px">
+          <h4>Asamblea General</h4>
+          <p>Primera autoridad · Art. 20</p>
+        </div>
+        <svg height="32" width="2"><line x1="1" y1="0" x2="1" y2="32" stroke="var(--green-400)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
+        <div class="org-node secondary" style="width:260px;border-color:var(--teal-500)">
+          <h4>Directorio</h4>
+          <p>Presidente · Secretario · Tesorero · Art. 31</p>
+        </div>
+        <svg height="32" width="2"><line x1="1" y1="0" x2="1" y2="32" stroke="var(--green-400)" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
+        <div style="display:flex;gap:2rem;flex-wrap:wrap;justify-content:center">
+          <div class="org-node" style="width:180px">
+            <h4>Dirección Ejecutiva</h4>
+            <p>Art. 43</p>
+          </div>
+          <div class="org-node" style="width:180px">
+            <h4>Coordinadores</h4>
+            <p>Por proyecto · Art. 46</p>
+          </div>
+          <div class="org-node" style="width:180px">
+            <h4>Comisiones</h4>
+            <p>Especiales · Art. 46</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="text-align:center;margin-top:2.5rem">
+        <a href="pages/fundacion.html#gobernanza" class="btn btn-secondary">Ver estructura completa →</a>
+        <a href="assets/estatuto-ecogen.pdf" class="btn btn-secondary" style="margin-left:1rem" target="_blank">
+          📄 Descargar Estatuto
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem">
+          <div style="width:36px;height:36px;background:var(--green-600);border-radius:9px;display:flex;align-items:center;justify-content:center">
+            <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
+              <circle cx="11" cy="6"  r="3" fill="white" opacity=".9"/>
+              <circle cx="11" cy="16" r="3" fill="white" opacity=".9"/>
+              <path d="M8 6 Q4 11 8 16" stroke="white" stroke-width="1.5" fill="none"/>
+              <path d="M14 6 Q18 11 14 16" stroke="white" stroke-width="1.5" fill="none"/>
+            </svg>
+          </div>
+          <span style="font-family:var(--font-display);font-size:1.2rem;color:white">ECOGEN</span>
+        </div>
+        <p data-i18n="footer_desc">Ecología y Genética para el Desarrollo Sostenible. Fundación sin fines de lucro registrada en Santa Cruz, Bolivia.</p>
+        <div class="footer-social mt-4">
+          <a href="#" aria-label="Facebook">f</a>
+          <a href="#" aria-label="Instagram">ig</a>
+          <a href="#" aria-label="LinkedIn">in</a>
+          <a href="#" aria-label="YouTube">yt</a>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <h4 data-i18n="footer_links_org">Organización</h4>
+        <ul>
+          <li><a href="pages/fundacion.html#quienes"   data-i18n="sub_quienes">Quiénes somos</a></li>
+          <li><a href="pages/fundacion.html#gobernanza" data-i18n="sub_gobernanza">Gobernanza</a></li>
+          <li><a href="assets/estatuto-ecogen.pdf" target="_blank">Estatuto Orgánico</a></li>
+          <li><a href="pages/noticias.html" data-i18n="sub_noticias">Noticias</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4 data-i18n="footer_links_proj">Proyectos</h4>
+        <ul>
+          <li><a href="pages/ciencia.html#biotech"       data-i18n="sub_biotech">Biotecnología</a></li>
+          <li><a href="pages/territorio.html#carbono"    data-i18n="sub_carbono">Bonos de Carbono</a></li>
+          <li><a href="pages/comunidad.html#becas"       data-i18n="sub_becas">Becas</a></li>
+          <li><a href="pages/territorio.html#reforest"   data-i18n="sub_reforest">Reforestación</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4 data-i18n="footer_links_join">Participar</h4>
+        <ul>
+          <li><a href="pages/unete.html#membresia"  data-i18n="sub_membresia">Membresía</a></li>
+          <li><a href="pages/unete.html#voluntario" data-i18n="sub_voluntario">Voluntariado</a></li>
+          <li><a href="pages/unete.html#donaciones" data-i18n="sub_donaciones">Donaciones</a></li>
+          <li><a href="mailto:info@ecogen.org.bo">info@ecogen.org.bo</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span data-i18n="footer_rights">© 2025 Fundación ECOGEN. Todos los derechos reservados.</span>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap">
+        <a href="pages/fundacion.html#legal" data-i18n="footer_legal">Marco legal · Ley Departamental N° 50</a>
+        <a href="pages/privacidad.html" data-i18n="footer_privacy">Política de privacidad</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="i18n/translations.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+(function () {
+  const canvas = document.getElementById('hero-grid-canvas');
+  const hero   = document.getElementById('home-hero');
+  if (!canvas || !hero) return;
+  const ctx  = canvas.getContext('2d');
+  const CELL = 60;
+  let W = 0, H = 0;
+  let pulses = [];
+
+  /* ── MEJORA 1: resize con debounce 150ms ── */
+  let resizeTimer;
+  function resize() {
+    W = hero.offsetWidth;
+    H = hero.offsetHeight;
+    canvas.width        = W;
+    canvas.height       = H;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+  }
+
+  /* ── MEJORA 2: pausar el loop cuando el hero no es visible ── */
+  let heroVisible = true;
+  new IntersectionObserver(
+    ([entry]) => { heroVisible = entry.isIntersecting; },
+    { threshold: 0 }
+  ).observe(hero);
+
+  /* crea un pulso que recorre una línea del grid */
+  function spawnPulse() {
+    if (pulses.length >= 3) return;
+
+    const dir   = Math.random() < .5 ? 'h' : 'v';
+    const hue   = Math.random() < .5 ? 150 : 175;
+    const speed = 2.5 + Math.random() * 3;
+
+    if (dir === 'h') {
+      const rows    = Math.floor(H / CELL);
+      const row     = Math.floor(Math.random() * rows);
+      const y       = row * CELL;
+      const goRight = Math.random() < .5;
+      pulses.push({
+        dir, hue,
+        x:   goRight ? 0 : W,
+        y,
+        vel: goRight ? speed : -speed,
+        len: CELL * (1.8 + Math.random()),
+        alive: true,
+      });
+    } else {
+      const cols   = Math.floor(W / CELL);
+      const col    = Math.floor(Math.random() * cols);
+      const x      = col * CELL;
+      const goDown = Math.random() < .5;
+      pulses.push({
+        dir, hue,
+        x,
+        y:   goDown ? 0 : H,
+        vel: goDown ? speed : -speed,
+        len: CELL * (1.8 + Math.random()),
+        alive: true,
+      });
+    }
+  }
+
+  /* estela tipo "cometa" */
+  function drawPulse(p) {
+    ctx.save();
+
+    if (p.dir === 'h') {
+      const tail = p.x - Math.sign(p.vel) * p.len;
+      const grad = ctx.createLinearGradient(tail, 0, p.x, 0);
+      grad.addColorStop(0,   `hsla(${p.hue},85%,75%,0)`);
+      grad.addColorStop(0.6, `hsla(${p.hue},85%,75%,0.18)`);
+      grad.addColorStop(1,   `hsla(${p.hue},90%,85%,0.9)`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth   = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(tail, p.y);
+      ctx.lineTo(p.x,  p.y);
+      ctx.stroke();
+
+      const g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 18);
+      g2.addColorStop(0,   `hsla(${p.hue},90%,90%,0.7)`);
+      g2.addColorStop(0.5, `hsla(${p.hue},80%,70%,0.2)`);
+      g2.addColorStop(1,   `hsla(${p.hue},70%,60%,0)`);
+      ctx.fillStyle = g2;
+      ctx.fillRect(p.x - 18, p.y - 18, 36, 36);
+
+    } else {
+      const tail = p.y - Math.sign(p.vel) * p.len;
+      const grad = ctx.createLinearGradient(0, tail, 0, p.y);
+      grad.addColorStop(0,   `hsla(${p.hue},85%,75%,0)`);
+      grad.addColorStop(0.6, `hsla(${p.hue},85%,75%,0.18)`);
+      grad.addColorStop(1,   `hsla(${p.hue},90%,85%,0.9)`);
+      ctx.strokeStyle = grad;
+      ctx.lineWidth   = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(p.x, tail);
+      ctx.lineTo(p.x, p.y);
+      ctx.stroke();
+
+      const g2 = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 18);
+      g2.addColorStop(0,   `hsla(${p.hue},90%,90%,0.7)`);
+      g2.addColorStop(0.5, `hsla(${p.hue},80%,70%,0.2)`);
+      g2.addColorStop(1,   `hsla(${p.hue},70%,60%,0)`);
+      ctx.fillStyle = g2;
+      ctx.fillRect(p.x - 18, p.y - 18, 36, 36);
+    }
+
+    ctx.restore();
+  }
+
+  /* loop principal */
+  function draw() {
+    /* ── MEJORA 2: saltar frame si hero fuera de viewport ── */
+    if (!heroVisible) {
+      requestAnimationFrame(draw);
+      return;
+    }
+
+    ctx.clearRect(0, 0, W, H);
+
+    /* ── MEJORA 5: grid en un solo path → un único stroke() ── */
+    ctx.beginPath();
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth   = 1;
+    for (let x = 0; x <= W; x += CELL) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+    for (let y = 0; y <= H; y += CELL) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+    ctx.stroke();
+
+    /* mover y dibujar pulsos */
+    pulses = pulses.filter(p => {
+      if (p.dir === 'h') {
+        p.x += p.vel;
+        const tail = p.x - Math.sign(p.vel) * p.len;
+        return p.vel > 0 ? tail < W : tail > 0;
+      } else {
+        p.y += p.vel;
+        const tail = p.y - Math.sign(p.vel) * p.len;
+        return p.vel > 0 ? tail < H : tail > 0;
+      }
+    });
+
+    pulses.forEach(drawPulse);
+
+    requestAnimationFrame(draw);
+  }
+
+  /* arranque con retry hasta que el hero tenga altura */
+  function init() {
+    resize();
+    if (H < 200) { requestAnimationFrame(init); return; }
+
+    /* ── MEJORA 1: debounce en el listener de resize ── */
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(resize, 150);
+    });
+
+    spawnPulse();
+    setInterval(spawnPulse, 3000 + Math.random() * 1000);
+
+    draw();
+  }
+
+  document.fonts ? document.fonts.ready.then(init) : window.addEventListener('load', init);
+})();
+</script>
+
+<script>
+(function() {
+  const words = [
+    { text: 'que respira', special: false },
+    { text: 'que sueña',   special: false },
+    { text: 'que siente',  special: false },
+    { text: 'que VIVE',    special: true  },
+  ];
+
+  /* ── MEJORA 3: prefetch del video al cargar la página ── */
+  window.addEventListener('load', () => {
+    const prefetch = document.createElement('link');
+    prefetch.rel   = 'prefetch';
+    prefetch.href  = 'assets/principal/video/vive.mp4';
+    document.head.appendChild(prefetch);
+  }, { once: true });
+
+  const overlay  = document.getElementById('hero-transition-overlay');
+  const wordEl   = document.getElementById('hero-word');
+  const heroDesc = document.querySelector('.hero-desc');
+  const heroCta  = document.querySelector('.hero-cta');
+
+  let idx     = 0;
+  let blocked = false;
+
+  /* ── MEJORA 4: intervalId guardado para cancelarlo si fuera necesario ── */
+  const intervalId = setInterval(cycleWord, 7000);
+
+  function restoreHero() {
+    idx = 1; // "que sueña"
+    wordEl.classList.add('fade-out');
+
+    setTimeout(() => {
+      wordEl.textContent = words[idx].text;
+      wordEl.classList.remove('vive-zoom');
+      wordEl.style.cssText = '';
+      overlay.classList.remove('visible');
+      heroDesc.style.opacity = '1';
+      heroCta.style.opacity  = '1';
+
+      wordEl.classList.remove('fade-out');
+      wordEl.classList.add('fade-in');
+      setTimeout(() => wordEl.classList.remove('fade-in'), 500);
+
+      blocked = false;
+    }, 400);
+  }
+
+  function cycleWord() {
+    if (blocked) return;
+
+    idx = (idx + 1) % words.length;
+    const next = words[idx];
+
+    wordEl.classList.add('fade-out');
+
+    setTimeout(() => {
+      wordEl.textContent = next.text;
+
+      if (next.special) {
+        blocked = true;
+
+        wordEl.style.color         = '#d4a843';
+        wordEl.style.fontWeight    = '700';
+        wordEl.style.letterSpacing = '.12em';
+        wordEl.style.position      = 'relative';
+        wordEl.style.zIndex        = '10';
+        wordEl.classList.add('vive-zoom');
+
+        heroDesc.style.opacity = '0';
+        heroCta.style.opacity  = '0';
+
+        let vid = document.getElementById('vive-video');
+        if (!vid) {
+          vid = document.createElement('video');
+          vid.id          = 'vive-video';
+          vid.src         = 'assets/principal/video/vive.mp4';
+          vid.muted       = true;
+          vid.playsInline = true;
+          document.getElementById('home-hero').appendChild(vid);
+        }
+
+        setTimeout(() => {
+          vid.currentTime = 0;
+          vid.play();
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            vid.style.opacity = '1';
+          }));
+        }, 1000);
+
+        vid.onended = () => {
+          vid.style.opacity = '0';
+          setTimeout(() => { restoreHero(); }, 1200);
+        };
+
+      } else {
+        overlay.classList.remove('visible');
+        wordEl.style.cssText = '';
+        const vid = document.getElementById('vive-video');
+        if (vid) { vid.style.opacity = '0'; vid.pause(); }
+      }
+
+      wordEl.classList.remove('fade-out');
+      wordEl.classList.add('fade-in');
+      setTimeout(() => wordEl.classList.remove('fade-in'), 500);
+
+    }, 400);
+  }
+})();
+</script>
+
+<script src="js/navbar.js" data-active="" data-accent="#2d7a47"></script>
+
+</body>
+</html>

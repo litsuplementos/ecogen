@@ -1,0 +1,316 @@
+<!-- pages/noticias.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noticias & Divulgación — ECOGEN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    :root { --page-accent: #1f5c33; --page-accent-light: #eef8f2; }
+
+    /* HERO — editorial magazine style */
+    .hero-noticias {
+      min-height: 55vh; display: flex; align-items: flex-end;
+      position: relative; overflow: hidden;
+      background: var(--ink);
+      padding-bottom: 5rem;
+    }
+
+    /* Moving text ticker behind */
+    .ticker-bg {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      white-space: nowrap; overflow: hidden;
+      line-height: 1; pointer-events: none;
+    }
+    .ticker-text {
+      display: inline-block;
+      font-family: var(--font-display); font-size: 10rem; font-weight: 600;
+      color: rgba(255,255,255,.03); text-transform: uppercase;
+      animation: ticker 20s linear infinite;
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* Ink splat bg */
+    .ink-splat {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 80% 30%, rgba(45,122,71,.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 60% at 10% 70%, rgba(13,115,119,.1) 0%, transparent 60%);
+    }
+
+    .hero-news-inner {
+      max-width: 1200px; margin: 0 auto; padding: 0 2rem 0;
+      position: relative; z-index: 2; color: white; width: 100%;
+    }
+    .hero-news-eyebrow {
+      font-family: var(--font-mono); font-size: .72rem; letter-spacing: .2em;
+      text-transform: uppercase; color: var(--green-400); margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: .75rem;
+    }
+    .hero-news-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--green-400); opacity: .6; }
+    .hero-news-title { font-size: clamp(2.8rem, 6vw, 5rem); font-weight: 400; line-height: 1; margin-bottom: .5rem; }
+    .hero-news-title span { font-style: italic; color: var(--green-300); }
+
+    /* Search bar */
+    .news-search {
+      position: relative; max-width: 480px; margin-top: 2.5rem;
+    }
+    .news-search input {
+      width: 100%; padding: .85rem 1rem .85rem 3rem;
+      border-radius: 100px; border: 1.5px solid rgba(255,255,255,.15);
+      background: rgba(255,255,255,.06); color: white; font: inherit; font-size: .9rem;
+      backdrop-filter: blur(8px); transition: border-color .2s;
+    }
+    .news-search input::placeholder { color: rgba(255,255,255,.35); }
+    .news-search input:focus { outline: none; border-color: var(--green-500); }
+    .news-search-icon {
+      position: absolute; left: 1rem; top: 50%; transform: translateY(-50%);
+      color: rgba(255,255,255,.4); pointer-events: none;
+    }
+
+    /* ── Blog layout ── */
+    .blog-layout { display: grid; grid-template-columns: 1fr 300px; gap: 3rem; margin-top: 3rem; }
+    .blog-main {}
+    .blog-sidebar {}
+
+    /* Filter tabs */
+    .filter-tabs { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .filter-tab {
+      padding: .45rem 1rem; border-radius: 100px;
+      border: 1.5px solid var(--ink-10); font-size: .82rem; font-weight: 500;
+      background: var(--white); color: var(--ink-80); cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-tab:hover { border-color: var(--page-accent); color: var(--page-accent); }
+    .filter-tab.active { background: var(--page-accent); color: white; border-color: var(--page-accent); }
+
+    /* Article cards */
+    .article-card {
+      display: grid; grid-template-columns: 200px 1fr; gap: 1.5rem;
+      padding: 1.5rem 0; border-bottom: 1px solid var(--ink-10);
+      cursor: pointer; transition: background .15s;
+    }
+    .article-card:last-child { border-bottom: none; }
+    .article-card:hover .article-card-title { color: var(--page-accent); }
+    .article-card-img {
+      width: 200px; height: 130px; border-radius: var(--radius);
+      background: var(--green-100); flex-shrink: 0; overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--green-600); font-family: var(--font-mono); font-size: .7rem;
+    }
+    .article-card-meta { display: flex; align-items: center; gap: .75rem; margin-bottom: .5rem; flex-wrap: wrap; }
+    .article-card-title { font-size: 1.1rem; font-weight: 600; font-family: var(--font-display); margin-bottom: .5rem; transition: color .2s; line-height: 1.3; }
+    .article-card-excerpt { font-size: .9rem; color: var(--ink-80); max-width: none; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .article-card-footer { display: flex; align-items: center; gap: 1rem; margin-top: .75rem; font-size: .8rem; color: var(--ink-40); }
+
+    /* Featured big card */
+    .article-featured {
+      border-radius: var(--radius-lg); overflow: hidden; background: var(--white);
+      box-shadow: var(--shadow-md); margin-bottom: 2rem; cursor: pointer;
+    }
+    .article-featured-img { height: 320px; background: linear-gradient(135deg, var(--green-800), var(--teal-700)); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.3); font-family: var(--font-mono); }
+    .article-featured-body { padding: 2rem; }
+    .article-featured-title { font-size: 1.6rem; font-family: var(--font-display); margin: .75rem 0; }
+    .article-featured-title:hover { color: var(--page-accent); }
+
+    /* Sidebar */
+    .sidebar-widget { margin-bottom: 2rem; }
+    .sidebar-widget h4 { font-size: .85rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-40); margin-bottom: 1rem; }
+    .sidebar-link { display: block; padding: .6rem 0; border-bottom: 1px solid var(--ink-10); font-size: .9rem; color: var(--ink-80); transition: color .2s, padding-left .2s; }
+    .sidebar-link:hover { color: var(--page-accent); padding-left: .5rem; }
+    .sidebar-cat { display: flex; justify-content: space-between; align-items: center; padding: .5rem 0; border-bottom: 1px solid var(--ink-10); font-size: .88rem; }
+    .sidebar-cat-count { font-family: var(--font-mono); font-size: .75rem; color: var(--page-accent); }
+
+    @media(max-width:900px) {
+      .blog-layout { grid-template-columns: 1fr; }
+      .blog-sidebar { display: none; }
+      .article-card { grid-template-columns: 1fr; }
+      .article-card-img { width: 100%; height: 180px; }
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- ═══ HERO ═══ -->
+<section class="hero-noticias">
+  <div class="ink-splat"></div>
+  <div class="ticker-bg">
+    <span class="ticker-text">ECOGEN · CIENCIA · BIODIVERSIDAD · SOSTENIBILIDAD · BOLIVIA · &nbsp;</span>
+    <span class="ticker-text">ECOGEN · CIENCIA · BIODIVERSIDAD · SOSTENIBILIDAD · BOLIVIA · &nbsp;</span>
+  </div>
+
+  <div class="hero-news-inner">
+    <p class="hero-news-eyebrow">Fundación ECOGEN · Divulgación científica</p>
+    <h1 class="hero-news-title">Noticias &<br><span>conocimiento</span></h1>
+
+    <div class="news-search">
+      <svg class="news-search-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M11 11L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="search-input" placeholder="Buscar noticias, proyectos, becas..." oninput="filterArticles()">
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;right:0">
+    <svg viewBox="0 0 1440 60" preserveAspectRatio="none" style="display:block;width:100%;height:60px">
+      <path d="M0,30 Q360,60 720,20 Q1080,-10 1440,30 L1440,60 L0,60Z" fill="var(--off-white)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══ BLOG ═══ -->
+<div class="container" style="padding-top:0">
+  <div class="blog-layout">
+    <main class="blog-main">
+
+      <!-- Filters -->
+      <div class="filter-tabs" data-reveal>
+        <button class="filter-tab active" onclick="filterCat(this,'all')">Todas</button>
+        <button class="filter-tab" onclick="filterCat(this,'divulgacion')">Divulgación científica</button>
+        <button class="filter-tab" onclick="filterCat(this,'proyecto')">Proyectos</button>
+        <button class="filter-tab" onclick="filterCat(this,'asamblea')">Asambleas</button>
+        <button class="filter-tab" onclick="filterCat(this,'beca')">Becas</button>
+        <button class="filter-tab" onclick="filterCat(this,'institucional')">Institucional</button>
+      </div>
+
+      <!-- Featured article -->
+      <div class="article-featured" id="featured-article" data-reveal>
+        <div class="article-featured-img">[imagen destacada]</div>
+        <div class="article-featured-body">
+          <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap">
+            <span class="badge badge-green">divulgación</span>
+            <span style="font-size:.8rem;color:var(--ink-40)">27 de marzo, 2025</span>
+          </div>
+          <h2 class="article-featured-title">ECOGEN inicia primer banco genético del oriente boliviano</h2>
+          <p style="color:var(--ink-80);max-width:none">El laboratorio de biotecnología verde en San José de Chiquitos conservará más de 200 especies vegetales endémicas de la Chiquitanía con potencial medicinal y alimenticio. Es el primer banco de este tipo en el oriente boliviano.</p>
+          <a href="#" class="btn btn-primary" style="margin-top:1.25rem;background:var(--page-accent)">Leer artículo completo →</a>
+        </div>
+      </div>
+
+      <!-- Articles list -->
+      <div id="articles-list" data-reveal data-reveal-delay="1">
+        <!-- Rendered by JS -->
+      </div>
+
+      <!-- Load more -->
+      <div style="text-align:center;margin:2.5rem 0" id="load-more-wrap">
+        <button class="btn btn-secondary" onclick="loadMore()">Cargar más artículos</button>
+      </div>
+    </main>
+
+    <!-- SIDEBAR -->
+    <aside class="blog-sidebar" data-reveal>
+      <div class="sidebar-widget">
+        <h4>Categorías</h4>
+        <div class="sidebar-cat"><span>Divulgación científica</span><span class="sidebar-cat-count">12</span></div>
+        <div class="sidebar-cat"><span>Proyectos</span><span class="sidebar-cat-count">8</span></div>
+        <div class="sidebar-cat"><span>Asambleas</span><span class="sidebar-cat-count">4</span></div>
+        <div class="sidebar-cat"><span>Becas</span><span class="sidebar-cat-count">3</span></div>
+        <div class="sidebar-cat"><span>Institucional</span><span class="sidebar-cat-count">6</span></div>
+      </div>
+
+      <div class="sidebar-widget">
+        <h4>Últimas convocatorias</h4>
+        <a href="unete.html#becas" class="sidebar-link">🎓 Beca Investigación Vegetal — cierre 30 Jul</a>
+        <a href="unete.html#becas" class="sidebar-link">🎓 Beca Gestión Ambiental — cierre 15 Ago</a>
+        <a href="#" class="sidebar-link">📋 Asamblea Ordinaria — 28 Mar 2025</a>
+      </div>
+
+      <div class="sidebar-widget">
+        <h4>Proyectos activos</h4>
+        <a href="ciencia.html#biotech"       class="sidebar-link">🧬 Banco Genético Chiquitano</a>
+        <a href="territorio.html#reforest"   class="sidebar-link">🌳 Reforestación Cuenca Piraí</a>
+        <a href="territorio.html#carbono"    class="sidebar-link">♻️ Certificación Bonos Carbono</a>
+        <a href="comunidad.html#centros"     class="sidebar-link">🚐 Centros Móviles de Salud</a>
+      </div>
+
+      <div style="background:var(--green-900);border-radius:var(--radius-lg);padding:1.5rem;color:white;text-align:center">
+        <div style="font-size:1.5rem;margin-bottom:.5rem">📧</div>
+        <h4 style="color:white;margin-bottom:.5rem;font-size:1rem">Newsletter ECOGEN</h4>
+        <p style="color:rgba(255,255,255,.6);font-size:.82rem;max-width:none;margin-bottom:1rem">Recibe nuestras noticias y convocatorias directamente en tu correo.</p>
+        <input type="email" placeholder="tu@email.com" style="width:100%;padding:.6rem .85rem;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.08);color:white;font:inherit;font-size:.85rem;margin-bottom:.6rem">
+        <button class="btn btn-primary" style="background:var(--green-600);width:100%;justify-content:center;font-size:.85rem">Suscribirse</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<div style="padding-bottom:4rem"></div>
+
+<script src="../i18n/translations.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/components.js"></script>
+
+<script>
+  // Placeholder articles
+  const ARTICLES = [
+    { cat: 'institucional', title: 'Firma de convenio con municipio de Concepción para restauración ecológica', excerpt: 'ECOGEN y el Gobierno Municipal de Concepción firmaron un convenio de cooperación para la restauración de 300 hectáreas en la Chiquitanía durante los próximos 3 años.', date: '22 mar 2025', read: '4 min', color: '#1f5c33' },
+    { cat: 'divulgacion', title: 'Nutracéuticos bolivianos con potencial exportador: majo, copoazú y asaí', excerpt: 'Investigadores de ECOGEN documentaron las propiedades antioxidantes y nutricionales de tres especies nativas del oriente boliviano con alto potencial para el mercado internacional.', date: '15 mar 2025', read: '6 min', color: '#0d7377' },
+    { cat: 'asamblea', title: 'Convocatoria Asamblea Ordinaria 2025 — todos los asociados', excerpt: 'El Directorio convoca a todos los asociados activos y fundadores a la Asamblea General Ordinaria 2025, a celebrarse el 28 de marzo conforme al Art. 21 del Estatuto Orgánico.', date: '10 mar 2025', read: '2 min', color: '#185fa5' },
+    { cat: 'proyecto', title: 'Avance del proyecto de reforestación Cuenca del Piraí: 340 hectáreas restauradas', excerpt: 'El proyecto de restauración ecológica en la cuenca del río Piraí alcanzó las 340 hectáreas con más de 127,000 árboles de especies nativas plantados en el primer semestre.', date: '5 mar 2025', read: '5 min', color: '#2d7a47' },
+    { cat: 'beca', title: 'Abiertas las postulaciones a 3 becas de investigación 2025', excerpt: 'La Fundación ECOGEN abre convocatoria para becas en biotecnología vegetal, gestión ambiental y nutrición comunitaria. Cierre de postulaciones en julio y agosto.', date: '1 mar 2025', read: '3 min', color: '#b38a28' },
+    { cat: 'divulgacion', title: 'Criopreservación de material genético: técnicas modernas para preservar la biodiversidad', excerpt: 'Una guía completa sobre las metodologías de criopreservación utilizadas en el banco genético ECOGEN para conservar material biológico de especies en riesgo.', date: '22 feb 2025', read: '8 min', color: '#0d7377' },
+  ];
+
+  let activeFilter = 'all';
+  let searchTerm = '';
+
+  function renderArticles() {
+    const filtered = ARTICLES.filter(a => {
+      const matchCat    = activeFilter === 'all' || a.cat === activeFilter;
+      const matchSearch = !searchTerm || a.title.toLowerCase().includes(searchTerm) || a.excerpt.toLowerCase().includes(searchTerm);
+      return matchCat && matchSearch;
+    });
+    const list = document.getElementById('articles-list');
+    if (!filtered.length) {
+      list.innerHTML = '<p style="color:var(--ink-40);padding:2rem 0">No se encontraron artículos para esa búsqueda.</p>';
+      return;
+    }
+    list.innerHTML = filtered.map(a => `
+      <article class="article-card">
+        <div class="article-card-img" style="background:${a.color}18">
+          <span style="color:${a.color}">[img]</span>
+        </div>
+        <div>
+          <div class="article-card-meta">
+            <span class="badge badge-green">${a.cat}</span>
+            <span style="font-size:.78rem;color:var(--ink-40)">${a.date}</span>
+          </div>
+          <h3 class="article-card-title">${a.title}</h3>
+          <p class="article-card-excerpt">${a.excerpt}</p>
+          <div class="article-card-footer">
+            <span>⏱ ${a.read} de lectura</span>
+            <a href="#" style="color:var(--page-accent);font-weight:500">Leer →</a>
+          </div>
+        </div>
+      </article>`).join('');
+  }
+
+  function filterCat(btn, cat) {
+    document.querySelectorAll('.filter-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = cat;
+    renderArticles();
+  }
+
+  function filterArticles() {
+    searchTerm = document.getElementById('search-input').value.toLowerCase();
+    renderArticles();
+  }
+
+  function loadMore() {
+    document.getElementById('load-more-wrap').innerHTML = '<p style="color:var(--ink-40);font-size:.9rem">No hay más artículos por el momento.</p>';
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    renderArticles();
+  });
+</script>
+
+<script src="../js/navbar.js" data-active="noticias" data-accent="#0d7377"></script>
+
+</body>
+</html>

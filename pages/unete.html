@@ -1,0 +1,587 @@
+<!-- pages/unete.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Únete — Fundación ECOGEN</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="../css/main.css">
+  <style>
+    :root { --page-accent: #c4511e; --page-accent-light: #faece7; --page-accent-dark: #3a1206; }
+
+    /* HERO */
+    .hero-unete {
+      min-height: 92vh; display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      background: var(--page-accent-dark);
+    }
+
+    /* Particle rings */
+    .ring-anim {
+      position: absolute; border-radius: 50%; border: 1px solid rgba(196,81,30,.25);
+      top: 50%; left: 60%; transform: translate(-50%, -50%);
+      animation: ringExpand 6s ease-out infinite;
+    }
+    .ring-anim:nth-child(2) { animation-delay: 2s; }
+    .ring-anim:nth-child(3) { animation-delay: 4s; }
+    @keyframes ringExpand {
+      0% { width: 100px; height: 100px; opacity: .8; }
+      100% { width: 800px; height: 800px; opacity: 0; }
+    }
+
+    /* Warm gradient core */
+    .coral-core {
+      position: absolute; width: 500px; height: 500px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(196,81,30,.3) 0%, transparent 70%);
+      top: 50%; left: 60%; transform: translate(-50%, -50%);
+    }
+
+    /* Floating dots */
+    .float-dot {
+      position: absolute; border-radius: 50%; background: rgba(196,81,30,.4);
+      animation: dotDrift ease-in-out infinite;
+    }
+
+    .hero-unete-inner {
+      max-width: 1200px; margin: 0 auto; padding: 2rem 2rem;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 4rem; align-items: center;
+      position: relative; z-index: 2; width: 100%;
+    }
+    .hero-u-text { color: white; }
+    .hero-u-eyebrow {
+      font-family: var(--font-mono); font-size: .75rem; letter-spacing: .2em;
+      text-transform: uppercase; color: #f0997b; margin-bottom: 1.5rem;
+    }
+    .hero-u-title { font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 400; line-height: 1.05; margin-bottom: 1.25rem; }
+    .hero-u-title em { color: #f0997b; font-style: italic; }
+    .hero-u-desc { color: rgba(255,255,255,.65); font-size: 1.05rem; max-width: 42ch; margin-bottom: 2rem; }
+
+    /* Join options quick-nav */
+    .join-options {
+      display: flex; flex-direction: column; gap: .75rem;
+    }
+    .join-option {
+      display: flex; align-items: center; gap: 1rem;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius); padding: 1rem 1.25rem;
+      color: white; cursor: pointer;
+      transition: background .2s, border-color .2s, transform .2s;
+      text-decoration: none;
+    }
+    .join-option:hover { background: rgba(196,81,30,.2); border-color: rgba(196,81,30,.4); transform: translateX(6px); }
+    .join-option-icon { font-size: 1.5rem; flex-shrink: 0; }
+    .join-option-text h4 { font-size: .95rem; color: white; margin-bottom: .15rem; }
+    .join-option-text p  { font-size: .8rem; color: rgba(255,255,255,.5); max-width: none; margin: 0; }
+    .join-option-arrow { margin-left: auto; color: rgba(255,255,255,.3); transition: transform .2s; }
+    .join-option:hover .join-option-arrow { transform: translateX(4px); color: #f0997b; }
+
+    /* ── Membership section ── */
+    .membership-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+    /* ── Donation widget ── */
+    .donation-toggle { display: flex; gap: .5rem; margin-bottom: 1.25rem; }
+    .donation-freq-btn {
+      flex: 1; padding: .6rem; border-radius: 8px; border: 1.5px solid var(--ink-10);
+      font-size: .85rem; font-weight: 500; background: var(--white); cursor: pointer;
+      transition: all .2s;
+    }
+    .donation-freq-btn.active {
+      background: var(--page-accent); color: white; border-color: var(--page-accent);
+    }
+
+    /* Volunteer form */
+    .volunteer-areas { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.5rem; }
+    .area-check {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .75rem 1rem; border-radius: var(--radius); border: 1.5px solid var(--ink-10);
+      cursor: pointer; transition: all .2s;
+    }
+    .area-check:has(input:checked) {
+      border-color: var(--page-accent); background: var(--page-accent-light);
+    }
+    .area-check input { accent-color: var(--page-accent); }
+
+    /* Success message */
+    .form-success {
+      display: none; text-align: center; padding: 2rem;
+    }
+    .form-success.show { display: block; }
+    .form-success-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    @media(max-width:768px) {
+      .hero-unete-inner { grid-template-columns: 1fr; }
+      .membership-grid { grid-template-columns: 1fr; }
+      .volunteer-areas { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body class="page-wrapper">
+
+<!-- HERO -->
+<section class="hero-unete">
+  <div class="ring-anim"></div>
+  <div class="ring-anim"></div>
+  <div class="ring-anim"></div>
+  <div class="coral-core"></div>
+
+  <!-- Floating dots -->
+  <div class="float-dot" style="width:8px;height:8px;top:20%;left:15%;animation-duration:7s;animation-delay:0s"></div>
+  <div class="float-dot" style="width:4px;height:4px;top:70%;left:25%;animation-duration:9s;animation-delay:2s"></div>
+  <div class="float-dot" style="width:6px;height:6px;top:40%;left:80%;animation-duration:11s;animation-delay:4s"></div>
+  <div class="float-dot" style="width:10px;height:10px;top:80%;left:70%;animation-duration:8s;animation-delay:1s"></div>
+
+  <div style="position:relative;z-index:2;width:100%">
+    <div class="hero-unete-inner">
+      <div class="hero-u-text" data-reveal>
+        <p class="hero-u-eyebrow">Fundación ECOGEN · Participación</p>
+        <h1 class="hero-u-title">
+          Sé parte<br>del <em>cambio</em><br>que necesitamos
+        </h1>
+        <p class="hero-u-desc">Cada miembro, voluntario y donante hace posible nuestra misión. Hay una forma de participar que es perfecta para ti.</p>
+        <div class="flex gap-2">
+          <a href="#membresia" class="btn btn-primary" style="background:var(--page-accent)">Quiero ser miembro</a>
+          <a href="#donaciones" class="btn btn-ghost">Donar ahora →</a>
+        </div>
+      </div>
+
+      <div class="join-options" data-reveal data-reveal-delay="2">
+        <a href="#membresia" class="join-option">
+          <span class="join-option-icon">🤝</span>
+          <div class="join-option-text">
+            <h4>Membresía</h4>
+            <p>Conviértete en asociado activo de la Fundación</p>
+          </div>
+          <span class="join-option-arrow">→</span>
+        </a>
+        <a href="#voluntario" class="join-option">
+          <span class="join-option-icon">💪</span>
+          <div class="join-option-text">
+            <h4>Voluntariado</h4>
+            <p>Aporta tu tiempo y talento a nuestros proyectos</p>
+          </div>
+          <span class="join-option-arrow">→</span>
+        </a>
+        <a href="#donaciones" class="join-option">
+          <span class="join-option-icon">💚</span>
+          <div class="join-option-text">
+            <h4>Donaciones</h4>
+            <p>Financia proyectos específicos o el fondo general</p>
+          </div>
+          <span class="join-option-arrow">→</span>
+        </a>
+        <a href="#becas" class="join-option">
+          <span class="join-option-icon">🎓</span>
+          <div class="join-option-text">
+            <h4>Postular a una beca</h4>
+            <p>Programas académicos y de investigación abiertos</p>
+          </div>
+          <span class="join-option-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div style="position:absolute;bottom:0;left:0;right:0">
+    <svg viewBox="0 0 1440 80" preserveAspectRatio="none" style="display:block;width:100%;height:80px">
+      <path d="M0,60 C300,100 600,20 900,60 C1100,85 1300,40 1440,60 L1440,80 L0,80Z" fill="var(--off-white)"/>
+    </svg>
+  </div>
+</section>
+
+<!-- STICKY SUBNAV -->
+<nav class="sticky-subnav">
+  <div class="container sticky-subnav-inner">
+    <a href="#membresia"  class="subnav-link active">🤝 Membresía</a>
+    <a href="#voluntario" class="subnav-link">💪 Voluntariado</a>
+    <a href="#donaciones" class="subnav-link">💚 Donaciones</a>
+    <a href="#becas"      class="subnav-link">🎓 Becas</a>
+  </div>
+</nav>
+
+<!-- MEMBRESÍA -->
+<section id="membresia" class="page-section">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3.5rem" data-reveal>
+      <p class="section-label">— Artículo 11 del Estatuto</p>
+      <h2>Tipos de membresía</h2>
+      <p class="section-subtitle" style="margin:0 auto">El número de asociados es ilimitado. Únete sin importar tu nacionalidad, credo o filiación política.</p>
+    </div>
+
+    <div class="membership-grid">
+      <div class="membership-card" data-reveal data-reveal-delay="1">
+        <span class="badge" style="background:var(--green-100);color:var(--green-700)">Art. 11.1a</span>
+        <h3 style="margin-top:.75rem">Miembro Fundador</h3>
+        <p style="color:var(--ink-80);font-size:.9rem;margin-bottom:1rem">Quienes suscriban el acta de fundación y escritura de constitución de la Fundación ECOGEN.</p>
+        <div class="membership-card-price">Fundacional</div>
+        <ul class="membership-card-features">
+          <li>Voz y voto en Asamblea General</li>
+          <li>Elegir y ser elegido para el Directorio</li>
+          <li>Acceso a todos los proyectos</li>
+          <li>Reconocimiento institucional</li>
+        </ul>
+        <a href="#form-membresia" class="btn btn-primary" style="margin-top:1.5rem;width:100%;justify-content:center;background:var(--page-accent)">Solicitar información</a>
+      </div>
+
+      <div class="membership-card" data-reveal data-reveal-delay="2" style="border-color:var(--page-accent);transform:translateY(-8px)">
+        <span class="badge" style="background:var(--page-accent-light);color:var(--page-accent)">Art. 11.2a · Recomendado</span>
+        <h3 style="margin-top:.75rem">Miembro Activo</h3>
+        <p style="color:var(--ink-80);font-size:.9rem;margin-bottom:1rem">Plena participación y derechos. Ingreso mediante solicitud patrocinada por un miembro activo.</p>
+        <div class="membership-card-price">Cuota anual</div>
+        <ul class="membership-card-features">
+          <li>Todos los derechos del Art. 16</li>
+          <li>Participar en proyectos y comisiones</li>
+          <li>Acceso a becas y capacitaciones</li>
+          <li>Voto en Asamblea General</li>
+          <li>Información periódica de gestión</li>
+        </ul>
+        <a href="#form-membresia" class="btn btn-primary" style="margin-top:1.5rem;width:100%;justify-content:center;background:var(--page-accent)">Solicitar membresía</a>
+      </div>
+
+      <div class="membership-card" data-reveal data-reveal-delay="3">
+        <span class="badge badge-teal">Art. 11.2b</span>
+        <h3 style="margin-top:.75rem">Miembro Adscrito</h3>
+        <p style="color:var(--ink-80);font-size:.9rem;margin-bottom:1rem">Para quienes simpatizan con la misión y quieren colaborar ocasionalmente sin compromisos formales.</p>
+        <div class="membership-card-price">Libre</div>
+        <ul class="membership-card-features">
+          <li>Acceso a eventos y talleres</li>
+          <li>Newsletter y noticias</li>
+          <li>Participar en actividades de campo</li>
+          <li>Sin obligaciones formales</li>
+        </ul>
+        <a href="#form-membresia" class="btn btn-secondary" style="margin-top:1.5rem;width:100%;justify-content:center">Suscribirse gratis</a>
+      </div>
+    </div>
+
+    <!-- Membership form -->
+    <div id="form-membresia" style="max-width:700px;margin:4rem auto 0" data-reveal>
+      <div class="donation-widget">
+        <h3 style="margin-bottom:1.5rem">Solicitud de membresía</h3>
+        <div id="memb-form">
+          <div class="grid-2" style="gap:1rem">
+            <div class="form-group">
+              <label class="form-label">Nombre *</label>
+              <input type="text" class="form-input" placeholder="Tu nombre">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Apellido *</label>
+              <input type="text" class="form-input" placeholder="Tu apellido">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Correo electrónico *</label>
+            <input type="email" class="form-input" placeholder="tu@email.com">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Teléfono</label>
+            <input type="tel" class="form-input" placeholder="+591 ...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tipo de membresía *</label>
+            <select class="form-select">
+              <option value="">Seleccionar...</option>
+              <option value="activo">Miembro Activo</option>
+              <option value="adscrito">Miembro Adscrito</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">¿Por qué deseas unirte? *</label>
+            <textarea class="form-textarea" placeholder="Cuéntanos tu motivación y cómo puedes contribuir a la misión de ECOGEN..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Currículum Vitae (URL o adjunto)</label>
+            <input type="url" class="form-input" placeholder="https://... o déjalo en blanco">
+          </div>
+          <button class="btn btn-primary" style="background:var(--page-accent);width:100%;justify-content:center" onclick="submitMembership()">
+            Enviar solicitud →
+          </button>
+        </div>
+        <div class="form-success" id="memb-success">
+          <div class="form-success-icon">✅</div>
+          <h4>¡Solicitud enviada!</h4>
+          <p style="color:var(--ink-80)">El Directorio revisará tu solicitud en la próxima sesión ordinaria y te contactará por correo electrónico.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VOLUNTARIADO -->
+<section id="voluntario" class="page-section page-section-alt">
+  <div class="container">
+    <div class="editorial-grid">
+      <div data-reveal>
+        <p class="section-label">— Voluntariado</p>
+        <h2>Tu tiempo vale<br>tanto como el dinero</h2>
+        <p style="color:var(--ink-80);margin-bottom:1rem">Los voluntarios son el corazón operativo de ECOGEN. Desde actividades de campo hasta apoyo técnico, hay un rol para cada perfil.</p>
+        <p style="color:var(--ink-80);margin-bottom:2rem">Todas las actividades voluntarias son coordinadas por el Directorio y registradas en nuestros sistemas, conforme al Art. 32.1f del Estatuto.</p>
+        <div class="flex gap-2" style="flex-wrap:wrap">
+          <a href="#form-voluntario" class="btn btn-primary" style="background:var(--page-accent)">Registrarme como voluntario</a>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-delay="2">
+        <h4 style="margin-bottom:1.25rem;color:var(--page-accent)">Áreas de voluntariado</h4>
+        <div style="display:flex;flex-direction:column;gap:.75rem">
+          <div class="feature-block" style="padding:1rem 1.25rem">
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <span style="font-size:1.25rem">🌳</span>
+              <div>
+                <h4 style="font-size:.9rem">Campo y reforestación</h4>
+                <p style="font-size:.8rem;max-width:none;color:var(--ink-80)">Siembra de árboles, monitoreo de bosques y actividades de restauración ecológica en campo.</p>
+              </div>
+            </div>
+          </div>
+          <div class="feature-block" style="padding:1rem 1.25rem">
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <span style="font-size:1.25rem">🧬</span>
+              <div>
+                <h4 style="font-size:.9rem">Apoyo en laboratorio</h4>
+                <p style="font-size:.8rem;max-width:none;color:var(--ink-80)">Asistencia técnica en biotecnología, análisis de muestras y documentación científica.</p>
+              </div>
+            </div>
+          </div>
+          <div class="feature-block" style="padding:1rem 1.25rem">
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <span style="font-size:1.25rem">📚</span>
+              <div>
+                <h4 style="font-size:.9rem">Educación ambiental</h4>
+                <p style="font-size:.8rem;max-width:none;color:var(--ink-80)">Talleres en escuelas, charlas comunitarias y materiales educativos.</p>
+              </div>
+            </div>
+          </div>
+          <div class="feature-block" style="padding:1rem 1.25rem">
+            <div style="display:flex;align-items:center;gap:.75rem">
+              <span style="font-size:1.25rem">💻</span>
+              <div>
+                <h4 style="font-size:.9rem">Comunicación y tecnología</h4>
+                <p style="font-size:.8rem;max-width:none;color:var(--ink-80)">Redes sociales, diseño gráfico, desarrollo web y divulgación científica.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Volunteer form -->
+    <div id="form-voluntario" style="max-width:600px;margin:3rem auto 0" data-reveal>
+      <div class="donation-widget">
+        <h3 style="margin-bottom:1.25rem">Registro de voluntario/a</h3>
+        <div class="form-group">
+          <label class="form-label">Nombre completo *</label>
+          <input type="text" class="form-input" placeholder="Tu nombre completo">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email y teléfono *</label>
+          <input type="email" class="form-input" placeholder="Email" style="margin-bottom:.5rem">
+          <input type="tel" class="form-input" placeholder="Teléfono">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Área de interés *</label>
+          <div class="volunteer-areas">
+            <label class="area-check"><input type="checkbox"> 🌳 Campo y reforestación</label>
+            <label class="area-check"><input type="checkbox"> 🧬 Laboratorio</label>
+            <label class="area-check"><input type="checkbox"> 📚 Educación</label>
+            <label class="area-check"><input type="checkbox"> 💻 Comunicación</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Disponibilidad</label>
+          <select class="form-select">
+            <option>Fines de semana</option>
+            <option>Días de semana</option>
+            <option>Ambos</option>
+            <option>Solo eventos puntuales</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" style="background:var(--page-accent);width:100%;justify-content:center" onclick="submitVolunteer()">
+          Registrarme como voluntario →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DONACIONES -->
+<section id="donaciones" class="page-section">
+  <div class="container">
+    <div class="editorial-grid reverse">
+      <div data-reveal>
+        <p class="section-label">— Artículo 47-48 del Estatuto</p>
+        <h2>Tu donación<br>transforma vidas<br>y ecosistemas</h2>
+        <p style="color:var(--ink-80);margin-bottom:1rem">El 100% de cada donación se destina exclusivamente al cumplimiento de los fines de la Fundación. Nunca se distribuye entre asociados (Art. 49).</p>
+        <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:2rem">
+          <div style="display:flex;align-items:center;gap:.75rem;padding:.85rem;border-radius:var(--radius);background:var(--green-50);border:1px solid var(--green-200)">
+            <span>🌳</span><span style="font-size:.9rem"><strong>Bs 150</strong> planta 10 árboles nativos en la Chiquitanía</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;padding:.85rem;border-radius:var(--radius);background:var(--teal-100);border:1px solid var(--teal-300);opacity:.8">
+            <span>🧬</span><span style="font-size:.9rem"><strong>Bs 500</strong> financia un mes de análisis genético</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.75rem;padding:.85rem;border-radius:var(--radius);background:var(--gold-50);border:1px solid var(--gold-200)">
+            <span>🎓</span><span style="font-size:.9rem"><strong>Bs 1,500</strong> cubre una beca de investigación por mes</span>
+          </div>
+        </div>
+      </div>
+
+      <div data-reveal data-reveal-delay="2">
+        <div class="donation-widget">
+          <h3 style="margin-bottom:1.25rem">Hacer una donación</h3>
+
+          <div class="donation-toggle">
+            <button class="donation-freq-btn active" onclick="setFreq(this,'unica')">Única vez</button>
+            <button class="donation-freq-btn" onclick="setFreq(this,'mensual')">Mensual</button>
+            <button class="donation-freq-btn" onclick="setFreq(this,'anual')">Anual</button>
+          </div>
+
+          <label class="form-label" style="margin-bottom:.5rem">Selecciona el monto (USD)</label>
+          <div class="donation-amounts" id="donation-amounts">
+            <button class="donation-amount-btn" onclick="selectAmount(this,'20')">$20</button>
+            <button class="donation-amount-btn selected" onclick="selectAmount(this,'50')">$50</button>
+            <button class="donation-amount-btn" onclick="selectAmount(this,'100')">$100</button>
+            <button class="donation-amount-btn" onclick="selectAmount(this,'250')">$250</button>
+          </div>
+          <div class="form-group">
+            <label class="form-label">O ingresa un monto personalizado (USD)</label>
+            <input type="number" class="form-input" id="custom-amount" placeholder="Otro monto" min="5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Destino de tu donación</label>
+            <select class="form-select" id="donation-dest">
+              <option value="general">Fondo general</option>
+              <option value="proyecto">Proyecto específico</option>
+              <option value="beca">Programa de becas</option>
+              <option value="carbono">Bonos de carbono</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Tu nombre</label>
+            <input type="text" class="form-input" placeholder="Nombre del donante (o 'Anónimo')">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email (para recibo)</label>
+            <input type="email" class="form-input" placeholder="tu@email.com">
+          </div>
+          <button class="btn btn-primary" style="background:var(--page-accent);width:100%;justify-content:center;font-size:1rem" onclick="submitDonation()">
+            💚 Donar ahora
+          </button>
+          <p style="text-align:center;font-size:.75rem;color:var(--ink-40);margin-top:.75rem">
+            Pago seguro · Recibirás un comprobante por email
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BECAS -->
+<section id="becas" class="page-section page-section-alt">
+  <div class="container">
+    <div style="text-align:center;margin-bottom:3rem" data-reveal>
+      <p class="section-label">— Postulaciones</p>
+      <h2>Postula a una beca</h2>
+      <p class="section-subtitle" style="margin:0 auto">Las becas de ECOGEN están abiertas a estudiantes y profesionales bolivianos comprometidos con la sostenibilidad y la ciencia.</p>
+    </div>
+
+    <div style="max-width:640px;margin:0 auto" data-reveal>
+      <div class="donation-widget">
+        <h3 style="margin-bottom:1.25rem">Formulario de postulación</h3>
+        <div class="form-group">
+          <label class="form-label">Beca de interés *</label>
+          <select class="form-select">
+            <option>Seleccionar beca...</option>
+            <option>Beca Investigación Vegetal</option>
+            <option>Beca Gestión Ambiental</option>
+            <option>Beca Nutrición Comunitaria</option>
+          </select>
+        </div>
+        <div class="grid-2" style="gap:1rem">
+          <div class="form-group">
+            <label class="form-label">Nombre completo *</label>
+            <input type="text" class="form-input" placeholder="Tu nombre">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Cédula de identidad *</label>
+            <input type="text" class="form-input" placeholder="1234567 LP">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email *</label>
+          <input type="email" class="form-input" placeholder="tu@email.com">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nivel educativo *</label>
+          <select class="form-select">
+            <option>Técnico</option>
+            <option>Licenciatura</option>
+            <option>Maestría</option>
+            <option>Doctorado</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Carta de motivación * (máximo 500 palabras)</label>
+          <textarea class="form-textarea" placeholder="¿Por qué mereces esta beca? ¿Cómo contribuirás a la misión de ECOGEN?"></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">URL de tu CV o portafolio</label>
+          <input type="url" class="form-input" placeholder="https://linkedin.com/in/...">
+        </div>
+        <button class="btn btn-primary" style="background:var(--page-accent);width:100%;justify-content:center" onclick="submitBeca()">
+          Enviar postulación →
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA EMPRESAS -->
+<section class="page-section" style="background:var(--page-accent-dark);color:white">
+  <div class="container" style="text-align:center">
+    <p class="section-label" style="color:#f0997b" data-reveal>— Alianzas corporativas</p>
+    <h2 style="color:white;margin-bottom:1rem" data-reveal>¿Tu empresa quiere<br>tener impacto real?</h2>
+    <p style="color:rgba(255,255,255,.65);margin:0 auto 2.5rem;max-width:50ch" data-reveal>Diseñamos programas de RSE, compensación de huella de carbono y alianzas estratégicas con fundamento científico y rendición de cuentas total.</p>
+    <a href="mailto:alianzas@ecogen.org.bo" class="btn btn-gold" data-reveal>Contactar al equipo →</a>
+  </div>
+</section>
+
+<script src="../i18n/translations.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/components.js"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => { initSubnav(); });
+
+  // Donation amount selector
+  function selectAmount(btn, amount) {
+    document.querySelectorAll('.donation-amount-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    document.getElementById('custom-amount').value = '';
+  }
+
+  // Frequency selector
+  function setFreq(btn, freq) {
+    document.querySelectorAll('.donation-freq-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+
+  // Form submissions (connect to Supabase in production)
+  async function submitMembership() {
+    document.getElementById('memb-form').style.display = 'none';
+    document.getElementById('memb-success').classList.add('show');
+    // TODO: await supabase.from('miembros').insert({...})
+  }
+  function submitVolunteer() { alert('¡Registro recibido! Te contactaremos pronto.'); }
+  function submitDonation() { alert('¡Gracias por tu donación! En breve recibirás instrucciones de pago.'); }
+  function submitBeca() { alert('¡Postulación enviada! El equipo evaluará tu solicitud.'); }
+
+  // Floating dots animation
+  document.querySelectorAll('.float-dot').forEach((dot, i) => {
+    dot.style.animation = `dotDrift ${7 + i*2}s ease-in-out ${i}s infinite alternate`;
+  });
+
+  // Add dotDrift keyframes
+  const style = document.createElement('style');
+  style.textContent = `@keyframes dotDrift { 0%{transform:translate(0,0)} 100%{transform:translate(${Math.random()>0.5?'':'-'}30px,${Math.random()>0.5?'':'-'}40px)} }`;
+  document.head.appendChild(style);
+</script>
+<script src="../js/navbar.js" data-active="unete" data-accent="#0d7377"></script>
+</body>
+</html>
