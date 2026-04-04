@@ -630,7 +630,8 @@ section { padding: 0rem 0; }
 
 /* FOOTER */
 footer {
-  background: var(--green-900); color: var(--white);
+  background: var(--page-accent-dark, var(--green-900));
+  color: var(--white);
   padding: 5rem 0 2rem;
 }
 .footer-grid {

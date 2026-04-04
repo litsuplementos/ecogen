@@ -1,10 +1,9 @@
 // js/main.js
 
-// Supabase config
-const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
+// Supabase
+const SUPABASE_URL      = 'https://YOUR_PROJECT.supabase.co';
 const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
 
-// Lazy-load Supabase only when needed
 let _supabase = null;
 async function getSupabase() {
   if (_supabase) return _supabase;
@@ -24,8 +23,7 @@ function t(key) {
 
 function applyTranslations() {
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    el.innerHTML = t(key);
+    el.innerHTML = t(el.dataset.i18n);
   });
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
     el.placeholder = t(el.dataset.i18nPlaceholder);
@@ -39,60 +37,19 @@ function applyTranslations() {
 function setLang(lang) {
   currentLang = lang;
   localStorage.setItem('ecogen_lang', lang);
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === lang);
-  });
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === lang)
+  );
   applyTranslations();
+  // Sincronizar con navbar.js si está cargado
+  if (typeof window.EcoNav?.setLang === 'function') window.EcoNav.setLang(lang);
 }
 
 window.setLang = setLang;
 
-
-// Navbar
-function initNavbar() {
-  const navbar = document.getElementById('navbar');
-  if (!navbar) return;
-
-  // Scroll state
-  const homeHero = document.getElementById('home-hero');
-  const updateNavStyle = () => {
-    const scrolled = window.scrollY > 40;
-    navbar.classList.toggle('scrolled', scrolled);
-    navbar.classList.toggle('transparent', !scrolled && !!homeHero);
-  };
-  updateNavStyle();
-  window.addEventListener('scroll', updateNavStyle, { passive: true });
-
-  // Active panel from URL
-  const path = window.location.pathname;
-  document.querySelectorAll('.nav-panel').forEach(p => {
-    const href = p.dataset.page || '';
-    p.classList.toggle('active', path.includes(href) && href !== '');
-  });
-
-  // Mobile menu
-  const burger = document.getElementById('nav-burger');
-  const mobileMenu = document.getElementById('mobile-menu');
-  const mobileClose = document.getElementById('mobile-close');
-
-  burger?.addEventListener('click', () => {
-    mobileMenu?.classList.add('open');
-    document.body.style.overflow = 'hidden';
-  });
-  const closeMobile = () => {
-    mobileMenu?.classList.remove('open');
-    document.body.style.overflow = '';
-  };
-  mobileClose?.addEventListener('click', closeMobile);
-  mobileMenu?.addEventListener('click', e => {
-    if (e.target === mobileMenu) closeMobile();
-  });
-}
-
-
 // Scroll Reveal
 function initScrollReveal() {
-  const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         e.target.classList.add('revealed');
@@ -104,16 +61,14 @@ function initScrollReveal() {
   document.querySelectorAll('[data-reveal]').forEach(el => observer.observe(el));
 }
 
-
-// Counter animation
+// Contadores animados
 function animateCounter(el, target, duration = 1800) {
   const start = performance.now();
-  const isDecimal = target % 1 !== 0;
-  const update = (now) => {
+  const update = now => {
     const progress = Math.min((now - start) / duration, 1);
-    const ease = 1 - Math.pow(1 - progress, 3);
-    const val = target * ease;
-    el.textContent = isDecimal
+    const ease     = 1 - Math.pow(1 - progress, 3);
+    const val      = target * ease;
+    el.textContent = target % 1 !== 0
       ? val.toFixed(1)
       : Math.floor(val).toLocaleString();
     if (progress < 1) requestAnimationFrame(update);
@@ -122,22 +77,19 @@ function animateCounter(el, target, duration = 1800) {
 }
 
 function initCounters() {
-  const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
-        const target = parseFloat(e.target.dataset.count);
-        animateCounter(e.target, target);
+        animateCounter(e.target, parseFloat(e.target.dataset.count));
         observer.unobserve(e.target);
       }
     });
   }, { threshold: 0.5 });
+
   document.querySelectorAll('[data-count]').forEach(el => observer.observe(el));
 }
 
-
-// Supabase data loaders
-
-// Load featured projects for home preview
+// Proyectos (home preview)
 async function loadProjectsPreview() {
   const container = document.getElementById('projects-grid');
   if (!container) return;
@@ -150,11 +102,8 @@ async function loadProjectsPreview() {
       .eq('estado', 'activo')
       .limit(3);
 
-    if (error || !data?.length) {
-      renderProjectsPlaceholder(container);
-      return;
-    }
-    container.innerHTML = data.map(p => renderProjectCard(p)).join('');
+    if (error || !data?.length) throw new Error('No data');
+    container.innerHTML = data.map(renderProjectCard).join('');
   } catch {
     renderProjectsPlaceholder(container);
   }
@@ -163,7 +112,7 @@ async function loadProjectsPreview() {
 function renderProjectCard(p) {
   const typeColors = {
     reforestacion: '#3d9e60', carbono: '#0d7377',
-    nutricion: '#b38a28', educacion: '#5dba7e', biotech: '#14a8a0'
+    nutricion: '#b38a28', educacion: '#5dba7e', biotech: '#14a8a0',
   };
   const color = typeColors[p.tipo] || '#3d9e60';
   return `
@@ -179,7 +128,7 @@ function renderProjectCard(p) {
       <h4>${p.titulo}</h4>
       <p>${p.descripcion?.slice(0, 100)}...</p>
       <div class="project-card-meta">
-        <span>●&nbsp;${p.estado}</span>
+        <span>● ${p.estado}</span>
         <span>${p.fecha_inicio ? new Date(p.fecha_inicio).getFullYear() : ''}</span>
       </div>
     </div>
@@ -188,12 +137,12 @@ function renderProjectCard(p) {
 
 function renderProjectsPlaceholder(container) {
   const items = [
-    { tipo: 'biotech',       titulo: 'Banco Genético Chiquitano',      desc: 'Conservación in vitro de especies endémicas de la Chiquitanía con valor medicinal y alimenticio.',      color: '#14a8a0' },
+    { tipo: 'biotech',       titulo: 'Banco Genético Chiquitano',      desc: 'Conservación in vitro de especies endémicas de la Chiquitanía con valor medicinal y alimenticio.',       color: '#14a8a0' },
     { tipo: 'reforestacion', titulo: 'Reforestación Cuenca Piraí',     desc: 'Restauración de 500 hectáreas degradadas mediante técnicas de bioingeniería y manejo forestal sostenible.', color: '#3d9e60' },
-    { tipo: 'carbono',       titulo: 'Certificación Bonos de Carbono', desc: 'Gestión y certificación bajo estándares VCS de proyectos de captura de CO₂ en bosques bolivianos.',       color: '#0d7377' },
+    { tipo: 'carbono',       titulo: 'Certificación Bonos de Carbono', desc: 'Gestión y certificación bajo estándares VCS de proyectos de captura de CO₂ en bosques bolivianos.',        color: '#0d7377' },
   ];
   container.innerHTML = items.map((p, i) => `
-  <article class="project-card" data-reveal data-reveal-delay="${i+1}">
+  <article class="project-card" data-reveal data-reveal-delay="${i + 1}">
     <div class="project-card-img" style="background:${p.color}18">
       <span style="color:${p.color};font-family:var(--font-mono);font-size:.75rem">[imagen]</span>
       <div class="project-card-img-bar" style="background:${p.color}"></div>
@@ -207,7 +156,7 @@ function renderProjectsPlaceholder(container) {
   </article>`).join('');
 }
 
-// Load latest news for home preview
+// Noticias (home preview)
 async function loadNewsPreview() {
   const featured = document.getElementById('news-featured');
   const list     = document.getElementById('news-list');
@@ -243,8 +192,8 @@ async function loadNewsPreview() {
         <p>${n.contenido?.slice(0, 80)}...</p>
         <small style="color:var(--ink-40)">${new Date(n.fecha_publicacion).toLocaleDateString(currentLang)}</small>
       </article>`).join('');
+
   } catch {
-    // Placeholder data
     featured.innerHTML = `
       <div class="news-featured-img">Cargando noticias desde Supabase...</div>
       <div class="news-featured-body">
@@ -253,10 +202,11 @@ async function loadNewsPreview() {
         <p>El laboratorio de biotecnología verde albergará más de 200 especies vegetales endémicas de la Chiquitanía...</p>
         <a href="pages/noticias.html" class="btn btn-secondary mt-2">Leer más →</a>
       </div>`;
+
     list.innerHTML = [
-      { cat: 'asamblea',    title: 'Convocatoria Asamblea Ordinaria 2025',            desc: 'El Directorio convoca a todos los asociados para la sesión anual de rendición de cuentas.' },
-      { cat: 'proyecto',    title: 'Firma de convenio con municipio de Concepción',   desc: 'Alianza para restauración ecológica en 300 hectáreas de la Chiquitanía.' },
-      { cat: 'divulgación', title: 'Nutracéuticos bolivianos con potencial exportador',desc: 'Investigadores de ECOGEN documentan propiedades terapéuticas del majo y el copoazú.' },
+      { cat: 'asamblea',    title: 'Convocatoria Asamblea Ordinaria 2025',             desc: 'El Directorio convoca a todos los asociados para la sesión anual de rendición de cuentas.' },
+      { cat: 'proyecto',    title: 'Firma de convenio con municipio de Concepción',    desc: 'Alianza para restauración ecológica en 300 hectáreas de la Chiquitanía.' },
+      { cat: 'divulgación', title: 'Nutracéuticos bolivianos con potencial exportador', desc: 'Investigadores de ECOGEN documentan propiedades terapéuticas del majo y el copoazú.' },
     ].map(n => `
       <article class="news-item">
         <span class="badge badge-green">${n.cat}</span>
@@ -266,53 +216,23 @@ async function loadNewsPreview() {
   }
 }
 
-
-// Page router (SPA-lite)
-// Each "page" section is toggled; only home renders everything inline
-function initRouter() {
-  // Handle smooth navigation clicks
-  document.querySelectorAll('[data-page-link]').forEach(link => {
-    link.addEventListener('click', e => {
-      const page = link.dataset.pageLink;
-      if (page) {
-        e.preventDefault();
-        window.location.href = page;
-      }
-    });
-  });
-}
-
-
-// Mobile accordion for sub-links
-function initMobileAccordion() {
-  document.querySelectorAll('.mobile-nav-item').forEach(item => {
-    const trigger = item.querySelector('.mobile-nav-trigger');
-    const sub = item.querySelector('.mobile-sub-links');
-    trigger?.addEventListener('click', () => {
-      const open = item.classList.toggle('open');
-      if (sub) sub.style.display = open ? 'flex' : 'none';
-    });
-  });
-}
-
-
 // Init
 document.addEventListener('DOMContentLoaded', () => {
-  // Language
-  document.querySelectorAll('.lang-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.lang === currentLang);
-    b.addEventListener('click', () => setLang(b.dataset.lang));
-  });
+  // Idioma, sincronizar botones (navbar.js maneja el click via EcoNav.setLang)
+  document.querySelectorAll('.lang-btn').forEach(b =>
+    b.classList.toggle('active', b.dataset.lang === currentLang)
+  );
   applyTranslations();
 
-  // Components
-  initNavbar();
+  // Componentes de página
   initScrollReveal();
   initCounters();
-  initRouter();
-  initMobileAccordion();
 
-  // Data
+  // Componentes opcionales (solo si components.js está cargado)
+  if (typeof initSubnav === 'function') initSubnav();
+  if (typeof initAccordions === 'function') initAccordions();
+
+  // Datos desde Supabase
   loadProjectsPreview();
   loadNewsPreview();
 });
