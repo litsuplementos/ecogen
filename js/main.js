@@ -137,9 +137,9 @@ function renderProjectCard(p) {
 
 function renderProjectsPlaceholder(container) {
   const items = [
-    { tipo: 'biotech',       titulo: 'Banco Genético Chiquitano',      desc: 'Conservación in vitro de especies endémicas de la Chiquitanía con valor medicinal y alimenticio.',       color: '#14a8a0' },
-    { tipo: 'reforestacion', titulo: 'Reforestación Cuenca Piraí',     desc: 'Restauración de 500 hectáreas degradadas mediante técnicas de bioingeniería y manejo forestal sostenible.', color: '#3d9e60' },
-    { tipo: 'carbono',       titulo: 'Certificación Bonos de Carbono', desc: 'Gestión y certificación bajo estándares VCS de proyectos de captura de CO₂ en bosques bolivianos.',        color: '#0d7377' },
+    { tipo: 'biotech', titulo: 'Banco Genético Chiquitano', desc: 'Conservación in vitro de especies endémicas de la Chiquitanía con valor medicinal y alimenticio.', color: '#14a8a0' },
+    { tipo: 'reforestacion', titulo: 'Reforestación Cuenca Piraí', desc: 'Restauración de 500 hectáreas degradadas mediante técnicas de bioingeniería y manejo forestal sostenible.', color: '#3d9e60' },
+    { tipo: 'carbono', titulo: 'Certificación Bonos de Carbono', desc: 'Gestión y certificación bajo estándares VCS de proyectos de captura de CO₂ en bosques bolivianos.', color: '#0d7377' },
   ];
   container.innerHTML = items.map((p, i) => `
   <article class="project-card" data-reveal data-reveal-delay="${i + 1}">
@@ -159,7 +159,7 @@ function renderProjectsPlaceholder(container) {
 // Noticias (home preview)
 async function loadNewsPreview() {
   const featured = document.getElementById('news-featured');
-  const list     = document.getElementById('news-list');
+  const list = document.getElementById('news-list');
   if (!featured || !list) return;
 
   try {

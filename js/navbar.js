@@ -3,16 +3,16 @@
 (function () {
   'use strict';
 
-  /* ─── Detectar ruta base ─────────────────────────────────────── */
+  /* Detectar ruta base */
   const IS_SUBPAGE = window.location.pathname.includes('/pages/');
   const PFX = IS_SUBPAGE ? '' : 'pages/';
 
-  /* ─── Leer atributos del propio <script> ─────────────────────── */
+  /* Leer atributos del propio <script> */
   const currentScript = document.currentScript;
   const ACTIVE_ID = currentScript?.dataset?.active || '';
   const ACCENT    = currentScript?.dataset?.accent  || '#2d7a47';
 
-  /* ─── Traducciones (ES / EN / PT) ───────────────────────────── */
+  /* Traducciones (ES / EN) */
   const T = {
     es: {
       nav_ciencia:'Ciencia', nav_territorio:'Territorio', nav_comunidad:'Comunidad',
@@ -34,52 +34,42 @@
       sub_membresia:'Membership', sub_voluntario:'Volunteering', sub_donaciones:'Donations',
       aria_menu:'Open menu', aria_close:'Close',
     },
-    pt: {
-      nav_ciencia:'Ciência', nav_territorio:'Território', nav_comunidad:'Comunidade',
-      nav_fundacion:'Fundação', nav_unete:'Junte-se',
-      sub_biotech:'Biotecnologia', sub_nutra:'Nutracêuticos', sub_labs:'Laboratórios',
-      sub_reforest:'Reflorestamento', sub_carbono:'Créditos de Carbono', sub_ecosistemas:'Ecossistemas',
-      sub_nutricion:'Nutrição', sub_educacion:'Educação', sub_becas:'Bolsas',
-      sub_quienes:'Quem somos', sub_gobernanza:'Governança', sub_noticias:'Notícias',
-      sub_membresia:'Associação', sub_voluntario:'Voluntariado', sub_donaciones:'Doações',
-      aria_menu:'Abrir menu', aria_close:'Fechar',
-    },
   };
 
-  /* ─── Definición de paneles ──────────────────────────────────── */
+  /* Definición de paneles */
   const PANELS = [
-    { id: 'ciencia',    labelKey: 'nav_ciencia',    href: `${PFX}ciencia.html`,    sub: [
-      { icon: '🧬', key: 'sub_biotech',    href: `${PFX}ciencia.html#biotech` },
-      { icon: '🌿', key: 'sub_nutra',      href: `${PFX}ciencia.html#nutra`   },
-      { icon: '🔬', key: 'sub_labs',       href: `${PFX}ciencia.html#labs`    },
+    { id: 'ciencia', labelKey: 'nav_ciencia', href: `${PFX}ciencia.html`, sub: [
+      { icon: '🧬', key: 'sub_biotech', href: `${PFX}ciencia.html#biotech` },
+      { icon: '🌿', key: 'sub_nutra', href: `${PFX}ciencia.html#nutra` },
+      { icon: '🔬', key: 'sub_labs', href: `${PFX}ciencia.html#labs` },
     ]},
     { id: 'territorio', labelKey: 'nav_territorio', href: `${PFX}territorio.html`, sub: [
-      { icon: '🌳', key: 'sub_reforest',   href: `${PFX}territorio.html#reforest`    },
-      { icon: '♻️', key: 'sub_carbono',    href: `${PFX}territorio.html#carbono`     },
-      { icon: '🏔️', key: 'sub_ecosistemas',href: `${PFX}territorio.html#ecosistemas` },
+      { icon: '🌳', key: 'sub_reforest', href: `${PFX}territorio.html#reforest` },
+      { icon: '♻️', key: 'sub_carbono', href: `${PFX}territorio.html#carbono` },
+      { icon: '🏔️', key: 'sub_ecosistemas', href: `${PFX}territorio.html#ecosistemas` },
     ]},
-    { id: 'comunidad',  labelKey: 'nav_comunidad',  href: `${PFX}comunidad.html`,  sub: [
-      { icon: '🥗', key: 'sub_nutricion',  href: `${PFX}comunidad.html#nutricion` },
-      { icon: '📚', key: 'sub_educacion',  href: `${PFX}comunidad.html#educacion` },
-      { icon: '🎓', key: 'sub_becas',      href: `${PFX}comunidad.html#becas`     },
+    { id: 'comunidad', labelKey: 'nav_comunidad',  href: `${PFX}comunidad.html`,  sub: [
+      { icon: '🥗', key: 'sub_nutricion', href: `${PFX}comunidad.html#nutricion` },
+      { icon: '📚', key: 'sub_educacion', href: `${PFX}comunidad.html#educacion` },
+      { icon: '🎓', key: 'sub_becas', href: `${PFX}comunidad.html#becas` },
     ]},
-    { id: 'fundacion',  labelKey: 'nav_fundacion',  href: `${PFX}fundacion.html`,  sub: [
-      { icon: '🏛️', key: 'sub_quienes',   href: `${PFX}fundacion.html#quienes`   },
+    { id: 'fundacion', labelKey: 'nav_fundacion', href: `${PFX}fundacion.html`,  sub: [
+      { icon: '🏛️', key: 'sub_quienes', href: `${PFX}fundacion.html#quienes` },
       { icon: '⚖️', key: 'sub_gobernanza', href: `${PFX}fundacion.html#gobernanza`},
-      { icon: '📰', key: 'sub_noticias',   href: `${PFX}noticias.html`            },
+      { icon: '📰', key: 'sub_noticias', href: `${PFX}noticias.html` },
     ]},
-    { id: 'unete',      labelKey: 'nav_unete',      href: `${PFX}unete.html`,      sub: [
-      { icon: '🤝', key: 'sub_membresia',  href: `${PFX}unete.html#membresia`  },
+    { id: 'unete', labelKey: 'nav_unete', href: `${PFX}unete.html`, sub: [
+      { icon: '🤝', key: 'sub_membresia', href: `${PFX}unete.html#membresia`  },
       { icon: '💪', key: 'sub_voluntario', href: `${PFX}unete.html#voluntario` },
       { icon: '💚', key: 'sub_donaciones', href: `${PFX}unete.html#donaciones` },
     ]},
   ];
 
-  /* ─── Estado de idioma ───────────────────────────────────────── */
+  /* Estado de idioma */
   let lang = localStorage.getItem('ecogen_lang') || 'es';
   const t = key => T[lang]?.[key] || T.es[key] || key;
 
-  /* ─── Logo SVG ───────────────────────────────────────────────── */
+  /* Logo SVG */
   const LOGO_SVG = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none">
     <circle cx="11" cy="6"  r="3" fill="white" opacity=".9"/>
     <circle cx="11" cy="16" r="3" fill="white" opacity=".9"/>
@@ -90,7 +80,7 @@
     <line x1="8" y1="14" x2="14" y2="14" stroke="white" stroke-width="1" opacity=".5"/>
   </svg>`;
 
-  /* ─── Generar HTML ───────────────────────────────────────────── */
+  /* Generar HTML */
   function buildPanelsHTML() {
     return PANELS.map(p => {
       const isActive = p.id === ACTIVE_ID;
@@ -127,15 +117,14 @@
     }).join('');
   }
 
-  /* ─── Montar en el DOM ───────────────────────────────────────── */
+  /* Montar en el DOM */
   function mount() {
     const logoHref = IS_SUBPAGE ? '../index.html' : '/';
-    const hasHero  = !!document.getElementById('home-hero');
+    const hasHero = !!document.getElementById('home-hero');
 
-    /* ── NAVBAR  — usa el mismo id="navbar" que el CSS ya conoce ── */
     const navbar = document.createElement('header');
-    navbar.id        = 'navbar';                           // ← mismo ID que main.css
-    navbar.className = hasHero ? 'transparent' : 'scrolled'; // ← mismas clases
+    navbar.id = 'navbar';
+    navbar.className = hasHero ? 'transparent' : 'scrolled'; 
 
     navbar.innerHTML = `
       <nav class="nav-inner">
@@ -148,23 +137,18 @@
           </div>
         </a>
 
-        <!-- spacer izquierdo: empuja paneles al centro -->
         <div class="nav-spacer"></div>
 
-        <!-- PANELES: posición absoluta centrada para que no se muevan entre páginas -->
         <div class="nav-panels" id="nav-panels-group">
           ${buildPanelsHTML()}
         </div>
 
-        <!-- spacer derecho: equilibra el lado del logo -->
         <div class="nav-spacer"></div>
 
         <div class="nav-lang">
           <button class="lang-btn${lang==='es'?' active':''}" data-lang="es">ES</button>
           <span style="opacity:.2">|</span>
           <button class="lang-btn${lang==='en'?' active':''}" data-lang="en">EN</button>
-          <span style="opacity:.2">|</span>
-          <button class="lang-btn${lang==='pt'?' active':''}" data-lang="pt">PT</button>
         </div>
 
         <button class="nav-burger" id="nav-burger" aria-label="${t('aria_menu')}">
@@ -175,10 +159,10 @@
 
     document.body.insertAdjacentElement('afterbegin', navbar);
 
-    /* ── MOBILE MENU — usa las mismas clases que main.css ── */
+    /* MOBILE MENU */
     const mobileMenu = document.createElement('div');
-    mobileMenu.className  = 'mobile-menu';                 // ← misma clase
-    mobileMenu.id         = 'mobile-menu';
+    mobileMenu.className = 'mobile-menu';                
+    mobileMenu.id = 'mobile-menu';
     mobileMenu.setAttribute('role', 'dialog');
     mobileMenu.setAttribute('aria-label', 'Menú principal');
     mobileMenu.innerHTML = `
@@ -190,12 +174,11 @@
       <div style="display:flex;gap:.5rem;margin-top:2rem">
         <button class="lang-btn" data-lang="es" style="color:white">ES</button>
         <button class="lang-btn" data-lang="en" style="color:white">EN</button>
-        <button class="lang-btn" data-lang="pt" style="color:white">PT</button>
       </div>`;
 
     document.body.insertAdjacentElement('afterbegin', mobileMenu);
 
-    /* ── Estilos extra solo para el centrado fijo de los paneles ── */
+    /* Estilos extra solo para el centrado fijo de los paneles */
     injectCenterFix();
 
     bindEvents(navbar, mobileMenu, hasHero);
@@ -206,29 +189,19 @@
     const s = document.createElement('style');
     s.id = 'ecogen-center-fix';
     s.textContent = `
-      /* ── El nav-panel NO puede tener overflow:hidden o los dropdowns se cortan ── */
       #navbar .nav-panel {
         overflow: visible !important;
       }
 
-      /* ── Centrado: los dos spacers toman el mismo espacio disponible ── */
-      /* El grupo de paneles queda geométricamente centrado porque
-         spacer-left y spacer-right tienen flex:1 cada uno.
-         Para que sea INVARIANTE entre páginas aunque el logo/lang cambien
-         de ancho, forzamos que ambos spacers tengan el mismo flex-grow
-         y que el grupo de paneles tenga flex-shrink:0. */
       #nav-panels-group {
         flex-shrink: 0;
-        /* Ancla visual centrada gracias a los dos spacers flex:1 */
       }
 
-      /* ── Dropdown: asegurar que sea visible por encima de todo ── */
       #navbar .nav-dropdown {
         z-index: 2000;
         overflow: visible;
       }
-
-      /* ── El nav-inner necesita overflow visible para los dropdowns ── */
+   
       #navbar .nav-inner {
         overflow: visible;
       }
@@ -239,21 +212,19 @@
     document.head.appendChild(s);
   }
 
-  /* ─── Eventos ────────────────────────────────────────────────── */
+  /* Eventos */
   function bindEvents(navbar, mobileMenu, hasHero) {
 
-    /* Scroll → cambiar estilo */
     if (hasHero) {
       const onScroll = () => {
         const scrolled = window.scrollY > 40;
-        navbar.classList.toggle('scrolled',     scrolled);
+        navbar.classList.toggle('scrolled', scrolled);
         navbar.classList.toggle('transparent', !scrolled);
       };
       onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
     }
 
-    /* Click en panel-inner → navegar */
     navbar.querySelectorAll('.nav-panel[data-panel]').forEach(panel => {
       const inner = panel.querySelector('.nav-panel-inner');
       panel.addEventListener('click', (e) => {
@@ -263,13 +234,11 @@
       });
     });
 
-    /* Al salir del panel con el mouse, quitar el foco para que
-    :focus-within no mantenga el dropdown pegado */
     navbar.querySelectorAll('.nav-panel').forEach(panel => {
       panel.addEventListener('mouseleave', () => panel.blur());
     });
 
-    /* Burger → abrir mobile */
+    /* Burger, abrir mobile */
     document.getElementById('nav-burger')?.addEventListener('click', () => {
       mobileMenu.classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -300,7 +269,7 @@
     });
   }
 
-  /* ─── i18n ───────────────────────────────────────────────────── */
+  /* i18n */
   function setLanguage(newLang) {
     if (!T[newLang]) return;
     lang = newLang;
@@ -317,7 +286,7 @@
     document.documentElement.lang = lang;
   }
 
-  /* ─── Auto-init ──────────────────────────────────────────────── */
+  /* Auto-init */
   function autoInit() {
     if (ACCENT !== '#2d7a47') {
       document.documentElement.style.setProperty('--page-accent', ACCENT);
