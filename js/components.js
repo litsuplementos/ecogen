@@ -67,7 +67,7 @@ function renderFooter() {
       </div>
     </div>
   </footer>`);
-  
+
   // Zadarma callback widget
   const zScript = document.createElement('script');
   zScript.type = 'text/javascript';
