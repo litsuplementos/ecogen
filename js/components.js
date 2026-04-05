@@ -67,6 +67,25 @@ function renderFooter() {
       </div>
     </div>
   </footer>`);
+  
+  // Zadarma callback widget
+  const zScript = document.createElement('script');
+  zScript.type = 'text/javascript';
+  zScript.textContent = `
+    var ZCallbackWidgetLinkId = 'db41c32feac046d9c95a44c3c7ab7a31';
+    var ZCallbackWidgetDomain = 'my.zadarma.com';
+    (function(){
+      var lt = document.createElement('script');
+      lt.type = 'text/javascript';
+      lt.charset = 'utf-8';
+      lt.async = true;
+      lt.src = 'https://' + ZCallbackWidgetDomain + '/callbackWidget/js/main.min.js?v=1.15.4';
+      var sc = document.getElementsByTagName('script')[0];
+      if (sc) sc.parentNode.insertBefore(lt, sc);
+      else document.documentElement.firstChild.appendChild(lt);
+    })();
+  `;
+  document.body.appendChild(zScript);
 }
 
 // Subnav active link tracking

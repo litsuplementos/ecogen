@@ -1,7 +1,7 @@
 // js/main.js
 
 // Supabase
-const SUPABASE_URL      = 'https://YOUR_PROJECT.supabase.co';
+const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
 const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
 
 let _supabase = null;
@@ -41,8 +41,6 @@ function setLang(lang) {
     b.classList.toggle('active', b.dataset.lang === lang)
   );
   applyTranslations();
-  // Sincronizar con navbar.js si está cargado
-  if (typeof window.EcoNav?.setLang === 'function') window.EcoNav.setLang(lang);
 }
 
 window.setLang = setLang;
@@ -204,8 +202,8 @@ async function loadNewsPreview() {
       </div>`;
 
     list.innerHTML = [
-      { cat: 'asamblea',    title: 'Convocatoria Asamblea Ordinaria 2025',             desc: 'El Directorio convoca a todos los asociados para la sesión anual de rendición de cuentas.' },
-      { cat: 'proyecto',    title: 'Firma de convenio con municipio de Concepción',    desc: 'Alianza para restauración ecológica en 300 hectáreas de la Chiquitanía.' },
+      { cat: 'asamblea', title: 'Convocatoria Asamblea Ordinaria 2025', desc: 'El Directorio convoca a todos los asociados para la sesión anual de rendición de cuentas.' },
+      { cat: 'proyecto', title: 'Firma de convenio con municipio de Concepción', desc: 'Alianza para restauración ecológica en 300 hectáreas de la Chiquitanía.' },
       { cat: 'divulgación', title: 'Nutracéuticos bolivianos con potencial exportador', desc: 'Investigadores de ECOGEN documentan propiedades terapéuticas del majo y el copoazú.' },
     ].map(n => `
       <article class="news-item">

@@ -10,31 +10,7 @@
   /* Leer atributos del propio <script> */
   const currentScript = document.currentScript;
   const ACTIVE_ID = currentScript?.dataset?.active || '';
-  const ACCENT    = currentScript?.dataset?.accent  || '#2d7a47';
-
-  /* Traducciones (ES / EN) */
-  const T = {
-    es: {
-      nav_ciencia:'Ciencia', nav_territorio:'Territorio', nav_comunidad:'Comunidad',
-      nav_fundacion:'Fundación', nav_unete:'Únete',
-      sub_biotech:'Biotecnología', sub_nutra:'Nutracéuticos', sub_labs:'Laboratorios',
-      sub_reforest:'Reforestación', sub_carbono:'Bonos de Carbono', sub_ecosistemas:'Ecosistemas',
-      sub_nutricion:'Nutrición', sub_educacion:'Educación', sub_becas:'Becas',
-      sub_quienes:'Quiénes somos', sub_gobernanza:'Gobernanza', sub_noticias:'Noticias',
-      sub_membresia:'Membresía', sub_voluntario:'Voluntariado', sub_donaciones:'Donaciones',
-      aria_menu:'Abrir menú', aria_close:'Cerrar',
-    },
-    en: {
-      nav_ciencia:'Science', nav_territorio:'Territory', nav_comunidad:'Community',
-      nav_fundacion:'Foundation', nav_unete:'Join Us',
-      sub_biotech:'Biotechnology', sub_nutra:'Nutraceuticals', sub_labs:'Laboratories',
-      sub_reforest:'Reforestation', sub_carbono:'Carbon Credits', sub_ecosistemas:'Ecosystems',
-      sub_nutricion:'Nutrition', sub_educacion:'Education', sub_becas:'Scholarships',
-      sub_quienes:'About Us', sub_gobernanza:'Governance', sub_noticias:'News',
-      sub_membresia:'Membership', sub_voluntario:'Volunteering', sub_donaciones:'Donations',
-      aria_menu:'Open menu', aria_close:'Close',
-    },
-  };
+  const ACCENT = currentScript?.dataset?.accent || '#2d7a47';
 
   /* Definición de paneles */
   const PANELS = [
@@ -67,7 +43,9 @@
 
   /* Estado de idioma */
   let lang = localStorage.getItem('ecogen_lang') || 'es';
-  const t = key => T[lang]?.[key] || T.es[key] || key;
+  const t = key => window.TRANSLATIONS?.[lang]?.[key] 
+               || window.TRANSLATIONS?.es?.[key] 
+               || key;
 
   /* Logo SVG */
   const LOGO_SVG = `<svg width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -271,7 +249,7 @@
 
   /* i18n */
   function setLanguage(newLang) {
-    if (!T[newLang]) return;
+    if (!window.TRANSLATIONS?.[newLang]) return;
     lang = newLang;
     localStorage.setItem('ecogen_lang', lang);
 
